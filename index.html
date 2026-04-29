@@ -14,14 +14,11 @@
     --bg-input:  #1a1a1a;
     --border:    rgba(255,255,255,0.08);
     --border-md: rgba(255,255,255,0.12);
-
     --text:      #ffffff;
     --text-sub:  #888888;
     --text-mute: #555555;
-
     --accent:      #e8850f;
     --accent-soft: rgba(232,133,15,0.12);
-
     --r-sm: 8px;
     --r-md: 14px;
     --r-lg: 50px;
@@ -278,8 +275,8 @@
     background: #2a2a2a;
     border-radius: var(--r-md);
     display: flex;
-    align-items: flex-end;
-    padding: 12px 12px 12px 18px;
+    align-items: center;
+    padding: 10px 10px 10px 18px;
     gap: 10px;
     margin-bottom: 20px;
     border: 1px solid rgba(255,255,255,0.06);
@@ -363,7 +360,6 @@
   .question-chip:nth-child(2) { animation-delay: 0.14s; }
   .question-chip:nth-child(3) { animation-delay: 0.20s; }
   .question-chip:nth-child(4) { animation-delay: 0.26s; }
-
   .question-chip:hover { background: #2a2a2a; }
 
   .chip-icon {
@@ -576,21 +572,9 @@
   .support-section {
     width: 100%;
     max-width: 520px;
-    margin-top: 48px;
-    margin-bottom: 8px;
-    align-self: center;
-  }
-
-  .support-card {
-    background: #141414;
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 18px;
-    padding: 28px 24px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 0;
+    margin-top: 32px;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
   }
 
   .support-label {
@@ -599,7 +583,7 @@
     text-transform: uppercase;
     letter-spacing: 1.5px;
     color: var(--accent);
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     font-family: 'Sora', sans-serif;
   }
 
@@ -607,22 +591,20 @@
     font-size: 14px;
     color: var(--text-sub);
     line-height: 1.65;
-    margin-bottom: 22px;
+    margin-bottom: 20px;
     font-weight: 300;
   }
 
   .btn-discord {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
     gap: 9px;
-    width: 100%;
-    padding: 14px 22px;
+    padding: 11px 22px;
     background: #5865F2;
     color: white;
     border-radius: var(--r-sm);
     text-decoration: none;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 500;
     transition: all 0.2s;
     font-family: 'Inter', sans-serif;
@@ -630,19 +612,16 @@
 
   .btn-discord:hover { background: #6875f5; transform: translateY(-1px); }
 
-  /* ── SITE FOOTER ── */
-  .site-footer {
+  /* ── RECAPTCHA NOTE ── */
+  .recaptcha-note {
     text-align: center;
-    font-size: 12px;
+    font-size: 11px;
     color: var(--text-mute);
-    margin-top: 32px;
-    margin-bottom: 16px;
+    margin-top: 28px;
     line-height: 1.6;
-    width: 100%;
-    max-width: 520px;
-    align-self: center;
-    padding: 0 8px;
   }
+
+  .recaptcha-note a { color: var(--text-mute); text-decoration: underline; }
 
   /* ── SCROLL DOWN ARROW ── */
   #scrollDownBtn {
@@ -666,7 +645,6 @@
   }
 
   #scrollDownBtn.visible { display: flex; opacity: 1; }
-
   #scrollDownBtn:hover { background: #d4760a; transform: translateX(-50%) scale(1.08); }
 
   #scrollDownBtn svg {
@@ -744,11 +722,7 @@
     font-weight: 300;
   }
 
-  .setup-desc a {
-    color: var(--accent);
-    text-decoration: none;
-  }
-
+  .setup-desc a { color: var(--accent); text-decoration: none; }
   .setup-desc a:hover { text-decoration: underline; }
 
   .setup-input-wrap {
@@ -771,7 +745,6 @@
   }
 
   #apiKeyInput::placeholder { color: #444; letter-spacing: 0; }
-
   #apiKeyInput:focus { border-color: rgba(232,133,15,0.4); }
 
   .setup-toggle-vis {
@@ -855,8 +828,8 @@
     line-height: 1.6;
   }
 
-  /* ── RESET KEY LINK (in sidebar) ── */
-  .sidebar-key-reset {
+  /* ── SIDEBAR BUTTONS ── */
+  .sidebar-key-reset, .sidebar-admin-btn {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -875,8 +848,10 @@
   }
 
   .sidebar-key-reset:hover { background: var(--bg-hover); color: var(--text-sub); }
+  .sidebar-admin-btn { color: var(--accent); opacity: 0.7; }
+  .sidebar-admin-btn:hover { background: var(--accent-soft); opacity: 1; }
 
-  .sidebar-key-reset svg {
+  .sidebar-key-reset svg, .sidebar-admin-btn svg {
     width: 18px;
     height: 18px;
     stroke: currentColor;
@@ -888,10 +863,401 @@
     opacity: 0.6;
   }
 
+  /* ── ADMIN PIN SCREEN ── */
+  #adminPinScreen {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.95);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    z-index: 600;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  #adminPinScreen.open { display: flex; animation: fadeUp 0.3s cubic-bezier(0.16,1,0.3,1); }
+
+  .pin-card {
+    background: #111;
+    border: 1px solid rgba(255,165,0,0.2);
+    border-radius: 20px;
+    padding: 36px 28px;
+    width: 100%;
+    max-width: 360px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .pin-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: var(--accent-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .pin-icon svg {
+    width: 26px;
+    height: 26px;
+    stroke: var(--accent);
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .pin-title {
+    font-family: 'Sora', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .pin-subtitle {
+    font-size: 13px;
+    color: var(--text-sub);
+    margin-bottom: 28px;
+    line-height: 1.5;
+  }
+
+  .pin-dots {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  .pin-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid #333;
+    transition: all 0.15s;
+  }
+
+  .pin-dot.filled {
+    background: var(--accent);
+    border-color: var(--accent);
+    transform: scale(1.1);
+  }
+
+  .pin-dot.error {
+    background: #e05050;
+    border-color: #e05050;
+    animation: shake 0.4s ease;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%       { transform: translateX(-4px); }
+    40%       { transform: translateX(4px); }
+    60%       { transform: translateX(-4px); }
+    80%       { transform: translateX(4px); }
+  }
+
+  .pin-keypad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    width: 100%;
+    max-width: 260px;
+    margin-bottom: 16px;
+  }
+
+  .pin-key {
+    aspect-ratio: 1;
+    background: #1e1e1e;
+    border: none;
+    border-radius: 12px;
+    font-size: 20px;
+    font-family: 'Sora', sans-serif;
+    font-weight: 500;
+    color: var(--text);
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .pin-key:hover { background: #2a2a2a; }
+  .pin-key:active { background: #333; transform: scale(0.94); }
+  .pin-key.empty { background: transparent; cursor: default; }
+  .pin-key.del { font-size: 16px; color: var(--text-sub); }
+
+  .pin-cancel {
+    background: none;
+    border: none;
+    font-size: 13px;
+    color: var(--text-mute);
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    padding: 8px 16px;
+    transition: color 0.2s;
+  }
+
+  .pin-cancel:hover { color: var(--text-sub); }
+
+  /* ── ADMIN PANEL ── */
+  #adminPanel {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 700;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  #adminPanel.open { display: flex; }
+
+  .admin-header {
+    height: 58px;
+    background: #0a0a0a;
+    border-bottom: 1px solid rgba(232,133,15,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    flex-shrink: 0;
+  }
+
+  .admin-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .admin-badge {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-family: 'Sora', sans-serif;
+  }
+
+  .admin-title {
+    font-family: 'Sora', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .admin-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-sub);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .admin-close:hover { background: var(--bg-hover); color: var(--text); }
+  .admin-close svg {
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .admin-stats {
+    display: flex;
+    gap: 12px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    overflow-x: auto;
+  }
+
+  .admin-stat {
+    background: #111;
+    border-radius: 10px;
+    padding: 10px 16px;
+    flex-shrink: 0;
+  }
+
+  .admin-stat-num {
+    font-family: 'Sora', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  .admin-stat-label {
+    font-size: 11px;
+    color: var(--text-mute);
+    margin-top: 2px;
+  }
+
+  .admin-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 20px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .admin-cat-header {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--accent);
+    padding: 20px 0 12px;
+    font-family: 'Sora', sans-serif;
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+    border-bottom: 1px solid rgba(232,133,15,0.15);
+    transition: opacity 0.2s;
+  }
+
+  .admin-cat-header:hover { opacity: 0.8; }
+
+  .admin-cat-chevron {
+    width: 14px;
+    height: 14px;
+    stroke: var(--accent);
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 0.25s;
+    flex-shrink: 0;
+  }
+
+  .admin-cat-header.collapsed .admin-cat-chevron {
+    transform: rotate(-90deg);
+  }
+
+  .admin-cat-group { overflow: hidden; }
+  .admin-cat-group.collapsed { display: none; }
+
+  .admin-faq-item {
+    overflow: hidden;
+  }
+
+  .admin-faq-q {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 0;
+    cursor: pointer;
+    gap: 12px;
+  }
+
+  .admin-faq-num {
+    font-family: 'Sora', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    width: 22px;
+    flex-shrink: 0;
+  }
+
+  .admin-faq-title {
+    flex: 1;
+    font-size: 14px;
+    color: var(--text);
+    font-weight: 400;
+    line-height: 1.4;
+  }
+
+  .admin-faq-chevron {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    stroke: var(--text-mute);
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 0.2s;
+  }
+
+  .admin-faq-item.expanded .admin-faq-chevron {
+    transform: rotate(180deg);
+  }
+
+  .admin-faq-answer {
+    display: none;
+    padding: 0 0 16px 26px;
+  }
+
+  .admin-faq-item.expanded .admin-faq-answer {
+    display: block;
+  }
+
+  .admin-faq-answer-text {
+    font-size: 13.5px;
+    color: #999;
+    line-height: 1.75;
+    font-weight: 300;
+  }
+
+  .admin-faq-answer-text p { margin-bottom: 8px; }
+  .admin-faq-answer-text p:last-child { margin-bottom: 0; }
+
+  .admin-faq-keys {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .admin-key-tag {
+    font-size: 11px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 4px;
+    padding: 3px 8px;
+    color: #555;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .admin-test-btn {
+    margin-top: 10px;
+    font-size: 12px;
+    padding: 6px 14px;
+    background: var(--accent-soft);
+    border: 1px solid rgba(232,133,15,0.2);
+    border-radius: 6px;
+    color: var(--accent);
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.18s;
+  }
+
+  .admin-test-btn:hover { background: rgba(232,133,15,0.2); }
+
   @media (max-width: 480px) {
     #homeView { padding-top: 56px; }
     .home-title { font-size: 22px; }
     .setup-card { padding: 28px 20px; }
+    .pin-card { padding: 28px 20px; }
   }
 </style>
 </head>
@@ -905,7 +1271,7 @@
     </div>
     <div class="setup-title">Connect your Gemini key</div>
     <div class="setup-desc">
-      To power this chatbot, paste your free <a href="https://aistudio.google.com/app/apikey" target="_blank">Gemini API key</a> below. It stays on your device only — it's never sent anywhere except directly to Google.
+      To power this chatbot, paste your free <a href="https://aistudio.google.com/app/apikey" target="_blank">Gemini API key</a> below. It stays on your device only, never sent anywhere except directly to Google.
     </div>
     <div class="setup-input-wrap">
       <input type="password" id="apiKeyInput" placeholder="AIza…" autocomplete="off" spellcheck="false">
@@ -920,6 +1286,53 @@
       <span class="setup-privacy-text">Your key is stored only in your browser's local storage. This screen won't appear again.</span>
     </div>
   </div>
+</div>
+
+<!-- ── ADMIN PIN SCREEN ── -->
+<div id="adminPinScreen">
+  <div class="pin-card">
+    <div class="pin-icon">
+      <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    </div>
+    <div class="pin-title">Admin Access</div>
+    <div class="pin-subtitle">Enter your PIN to view the FAQ database</div>
+    <div class="pin-dots" id="pinDots">
+      <div class="pin-dot" id="pd0"></div>
+      <div class="pin-dot" id="pd1"></div>
+      <div class="pin-dot" id="pd2"></div>
+      <div class="pin-dot" id="pd3"></div>
+    </div>
+    <div class="pin-keypad">
+      <button class="pin-key" onclick="pinPress('1')">1</button>
+      <button class="pin-key" onclick="pinPress('2')">2</button>
+      <button class="pin-key" onclick="pinPress('3')">3</button>
+      <button class="pin-key" onclick="pinPress('4')">4</button>
+      <button class="pin-key" onclick="pinPress('5')">5</button>
+      <button class="pin-key" onclick="pinPress('6')">6</button>
+      <button class="pin-key" onclick="pinPress('7')">7</button>
+      <button class="pin-key" onclick="pinPress('8')">8</button>
+      <button class="pin-key" onclick="pinPress('9')">9</button>
+      <button class="pin-key empty"></button>
+      <button class="pin-key" onclick="pinPress('0')">0</button>
+      <button class="pin-key del" onclick="pinDelete()">⌫</button>
+    </div>
+    <button class="pin-cancel" onclick="closeAdminPin()">Cancel</button>
+  </div>
+</div>
+
+<!-- ── ADMIN PANEL ── -->
+<div id="adminPanel">
+  <div class="admin-header">
+    <div class="admin-header-left">
+      <span class="admin-badge">Admin</span>
+      <span class="admin-title">FAQ Database</span>
+    </div>
+    <button class="admin-close" onclick="closeAdminPanel()">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="admin-stats" id="adminStats"></div>
+  <div class="admin-body" id="adminBody"></div>
 </div>
 
 <!-- Header -->
@@ -973,6 +1386,13 @@
       </svg>
       Whitepaper
     </a>
+    <button class="sidebar-admin-btn" onclick="openAdminPin()">
+      <svg viewBox="0 0 24 24">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+      </svg>
+      FAQ Admin Panel
+    </button>
     <button class="sidebar-key-reset" onclick="resetApiKey()">
       <svg viewBox="0 0 24 24">
         <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
@@ -1024,18 +1444,18 @@
     </div>
 
     <div class="support-section">
-      <div class="support-card">
-        <div class="support-label">Technical Support</div>
-        <div class="support-text">Can't find the answer you're looking for? Visit the official Delta Discord to open a support ticket for direct assistance.</div>
-        <a href="https://discord.gg/fw7mTD8Gha" target="_blank" class="btn-discord">
-          <svg width="18" height="18" viewBox="0 0 127.14 96.36" fill="white"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.71,32.65-1.82,56.6.48,80.05a105.73,105.73,0,0,0,32.44,16.31,75.7,75.7,0,0,0,7.19-11.73,69.05,69.05,0,0,1-11.37-5.43c.95-.7,1.89-1.44,2.78-2.2a73.27,73.27,0,0,0,64.06,0c.89.76,1.83,1.5,2.78,2.2a69.13,69.13,0,0,1-11.37,5.43,75.46,75.46,0,0,0,7.19,11.73,105.47,105.47,0,0,0,32.44-16.31C130.66,50.55,126.06,26.82,107.7,8.07ZM42.47,65.69c-6.35,0-11.6-5.83-11.6-13s5.11-13,11.6-13,11.6,5.83,11.6,13S48.82,65.69,42.47,65.69Zm42.2,0c-6.35,0-11.6-5.83-11.6-13s5.11-13,11.6-13,11.6,5.83,11.6,13S91,65.69,84.67,65.69Z"/></svg>
-          Join Delta Discord
-        </a>
-      </div>
+      <div class="support-label">Technical Support</div>
+      <div class="support-text">Can't find what you're looking for? Join the official Delta Discord community to open a support ticket and get direct help from the team and community members.</div>
+      <a href="https://discord.gg/fw7mTD8Gha" target="_blank" class="btn-discord">
+        <svg width="18" height="18" viewBox="0 0 127.14 96.36" fill="white"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.71,32.65-1.82,56.6.48,80.05a105.73,105.73,0,0,0,32.44,16.31,75.7,75.7,0,0,0,7.19-11.73,69.05,69.05,0,0,1-11.37-5.43c.95-.7,1.89-1.44,2.78-2.2a73.27,73.27,0,0,0,64.06,0c.89.76,1.83,1.5,2.78,2.2a69.13,69.13,0,0,1-11.37,5.43,75.46,75.46,0,0,0,7.19,11.73,105.47,105.47,0,0,0,32.44-16.31C130.66,50.55,126.06,26.82,107.7,8.07ZM42.47,65.69c-6.35,0-11.6-5.83-11.6-13s5.11-13,11.6-13,11.6,5.83,11.6,13S48.82,65.69,42.47,65.69Zm42.2,0c-6.35,0-11.6-5.83-11.6-13s5.11-13,11.6-13,11.6,5.83,11.6,13S91,65.69,84.67,65.69Z"/></svg>
+        Join Delta Discord
+      </a>
     </div>
 
-    <div class="site-footer">
-      Built for the Delta ecosystem. Not an official Delta product.
+    <div class="recaptcha-note">
+      This site is protected by reCAPTCHA and the Google
+      <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a>
+      and <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a> apply.
     </div>
   </div>
 
@@ -1071,11 +1491,19 @@
 </button>
 
 <script>
-// ── FAQ DATA ──────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+// FAQ DATA
+// KEY RULE: Each FAQ's `keys` array must ONLY match that exact
+// question. Never use a short keyword (like "dtc" or "supply")
+// that also appears in a different FAQ's question.
+// ─────────────────────────────────────────────────────────────
 const faqs = [
   {
-    q: "What is Delta?", cat: "Technology",
-    keys: ["what is delta", "delta", "what delta", "tell me about delta", "explain delta"],
+    q: "What is Delta?",
+    cat: "Technology",
+    // Exact title match only — "delta" alone is too broad and would
+    // steal hits from every other FAQ that mentions Delta.
+    keys: ["what is delta", "tell me about delta", "explain delta", "what delta", "about delta"],
     ans: `<p>Delta is a <span class="key-term">mobile-first digital currency system</span> designed to make cryptocurrency accessible and energy-efficient. Unlike traditional models like Bitcoin, Delta uses a <span class="key-term">Proof of People</span> concept, where real users earn tokens through a mobile app instead of using expensive, power-intensive hardware.</p>
           <p>The system runs on the <span class="key-term">Internet Computer blockchain</span> and features a two-token system:</p>
           <p>• <span class="key-term">DTCT (Delta Credits)</span>: Earned through mobile mining.<br>
@@ -1084,22 +1512,28 @@ const faqs = [
     follow: ["What blockchain does Delta use?", "What is DTCT?", "What is DTC?"]
   },
   {
-    q: "What blockchain does Delta use?", cat: "Technology",
-    keys: ["blockchain", "ic", "internet computer", "dfinity", "what blockchain", "which blockchain", "motoko", "flutter"],
+    q: "What blockchain does Delta use?",
+    cat: "Technology",
+    keys: ["what blockchain does delta use", "which blockchain does delta use", "internet computer", "dfinity", "ic blockchain", "motoko", "flutter blockchain"],
     ans: `<p>The Delta system runs on the <span class="key-term">Internet Computer (IC) blockchain</span>, developed by the DFINITY Foundation. It is one of the most advanced smart contract platforms in the world, offering high speed, low costs, and unlimited scalability compared to traditional blockchains.</p>
           <p>The Delta system is built using the <span class="key-term">Motoko programming language</span>, which is designed specifically for the Internet Computer. The Delta mobile app is developed using <span class="key-term">Flutter</span>.</p>`,
     follow: ["What is Delta?", "What is dApp Square?"]
   },
   {
-    q: "What is the difference between DTCT and DTC?", cat: "Tokenomics",
-    keys: ["difference between dtct and dtc", "dtct vs dtc", "dtct and dtc", "dtct dtc difference"],
+    q: "What is the difference between DTCT and DTC?",
+    cat: "Tokenomics",
+    // This must be a very specific phrase. Shorter fragments like "dtct"
+    // or "dtc" would wrongly match the individual DTCT/DTC FAQs.
+    keys: ["difference between dtct and dtc", "dtct vs dtc", "dtct and dtc difference", "difference dtct dtc", "compare dtct dtc"],
     ans: `<p><span class="key-term">DTCT (Delta Credit)</span> is the version of DTC that has not yet been activated or released. This is what Delta miners are currently earning. In its current state, DTCT cannot be withdrawn, transferred, or used in the Flea Market.</p>
           <p><span class="key-term">DTC (Delta Coin)</span> is the main digital currency of the Delta ecosystem. To receive DTC, you must complete identity verification (KYC) and actively participate in the Flea Market. Once those conditions are met, DTCT converts to DTC at a <span class="key-term">1:1 ratio</span>.</p>`,
     follow: ["What is DTCT?", "What is DTC?", "How is DTCT converted to DTC?"]
   },
   {
-    q: "What is DTCT?", cat: "Tokenomics",
-    keys: ["dtct", "what is dtct", "delta credit", "credits", "mining coins"],
+    q: "What is DTCT?",
+    cat: "Tokenomics",
+    // "dtct" alone only matches this FAQ — not the conversion or difference FAQs.
+    keys: ["what is dtct", "dtct", "delta credit", "what are credits", "mining coins dtct"],
     ans: `<p><span class="key-term">DTCT (Delta Credit)</span> is the version of DTC that has not yet been activated or released. This is what <span class="key-term">Delta miners</span> are currently earning.</p>
           <p>In its current state, DTCT is restricted:</p>
           <p>• It cannot be withdrawn or transferred to other wallets.<br>
@@ -1107,21 +1541,30 @@ const faqs = [
     follow: ["What is DTC?", "How is DTCT converted to DTC?", "What is the Release Mechanism?"]
   },
   {
-    q: "What is DTC?", cat: "Tokenomics",
-    keys: ["dtc", "what is dtc", "delta coin", "main coin", "delta currency"],
+    q: "What is DTC?",
+    cat: "Tokenomics",
+    // "dtc" alone matches this FAQ. "total supply of dtc" must NOT match here —
+    // it is handled by its own dedicated FAQ below.
+    keys: ["what is dtc", "dtc", "delta coin", "main coin", "delta currency"],
     ans: `<p><span class="key-term">DTC (Delta Coin)</span> is the main digital currency of the Delta ecosystem.</p>
           <p>DTC is not available to users right away. To receive it, you must complete <span class="key-term">identity verification (KYC)</span> and actively participate in the <span class="key-term">Flea Market</span>, Delta's peer-to-peer marketplace. Once those conditions are met, DTC is unlocked as a reward.</p>`,
     follow: ["How is DTCT converted to DTC?", "What is the total supply of DTC?", "What is the Release Mechanism?"]
   },
   {
-    q: "How is DTCT converted to DTC?", cat: "Tokenomics",
-    keys: ["convert", "conversion", "ratio", "1:1", "dtct to dtc", "how convert", "exchange"],
+    q: "How is DTCT converted to DTC?",
+    cat: "Tokenomics",
+    // Must match conversion questions specifically. "dtc" alone would be caught
+    // by "What is DTC?" above, so we use longer phrases here.
+    keys: ["how is dtct converted to dtc", "dtct to dtc", "convert dtct", "conversion ratio", "dtct conversion", "1:1 ratio", "how convert dtct"],
     ans: `<p>Once a user completes <span class="key-term">KYC verification</span>, their DTCT is converted to DTC at a <span class="key-term">1:1 ratio</span> — meaning 1 DTCT becomes 1 DTC. The "Credit" you mined officially becomes a "Coin."</p>`,
     follow: ["What is the Release Mechanism?", "What is KYC and why is it important?"]
   },
   {
-    q: "How does the Release Mechanism work?", cat: "Flea Market",
-    keys: ["release", "mechanism", "release mechanism", "behavioral cycle", "how release", "unlock coins", "how does the release mechanism work"],
+    q: "How does the Release Mechanism work?",
+    cat: "Flea Market",
+    // Specific to the release/unlock process. "release" alone is too vague, so
+    // we use longer multi-word anchors.
+    keys: ["how does the release mechanism work", "release mechanism", "behavioral cycle release", "behavioral cycle", "how release works", "unlock coins", "weekly release", "dtc release process"],
     ans: `<p>The <span class="key-term">Behavioral Cycle Release</span> moves your funds from DTCT to DTC gradually, not all at once:</p>
           <p>• <span class="key-term">First Release</span>: Immediately after you pass KYC, the first 1/100 (1%) of your total DTCT is released as DTC.<br>
           • <span class="key-term">Weekly Cycles</span>: After the first release, a new portion is released every 7 days.<br>
@@ -1129,21 +1572,26 @@ const faqs = [
     follow: ["What is the Flea Market in Delta?", "What is KYC and why is it important?"]
   },
   {
-    q: "Is it really decentralized?", cat: "Technology",
-    keys: ["decentralized", "is it decentralized", "really decentralized", "truly decentralized", "centralized or decentralized"],
+    q: "Is it really decentralized?",
+    cat: "Technology",
+    keys: ["is it really decentralized", "is delta decentralized", "really decentralized", "truly decentralized", "centralized or decentralized", "is delta centralized"],
     ans: `<p>Yes. Delta is built on the <span class="key-term">Internet Computer blockchain</span>, which is fully decentralized. This means no single company or server controls the network — it runs on a globally distributed set of independent nodes.</p>
           <p>The use of <span class="key-term">smart contracts (canisters)</span> on the Internet Computer means the rules of Delta are enforced by code, not by a central authority. This also means the Flea Market, mining, and token distribution are all transparent and tamper-proof.</p>`,
     follow: ["What blockchain does Delta use?", "What is Delta?", "What is dApp Square?"]
   },
   {
-    q: "What is the total supply of DTC?", cat: "Tokenomics",
-    keys: ["total supply", "300 billion", "supply", "how many dtc", "max supply"],
+    q: "What is the total supply of DTC?",
+    cat: "Tokenomics",
+    // IMPORTANT: "total supply" is the key phrase that differentiates this from
+    // "What is DTC?" — without it, the question would fall through to the wrong FAQ.
+    keys: ["total supply of dtc", "what is the total supply", "total supply dtc", "how many dtc exist", "max supply dtc", "300 billion dtc", "dtc supply", "max supply"],
     ans: `<p>The total initial supply of DTC is set at <span class="key-term">300 billion</span>. This large supply is intentional, making it practical for everyday transactions — pricing items in whole numbers rather than tiny fractions.</p>`,
     follow: ["How is the 300 billion DTC distributed?", "Does Delta have a TGE?"]
   },
   {
-    q: "How is the 300 billion DTC distributed?", cat: "Tokenomics",
-    keys: ["distributed", "distribution", "allocation", "how distributed", "breakdown", "split"],
+    q: "How is the 300 billion DTC distributed?",
+    cat: "Tokenomics",
+    keys: ["how is the 300 billion distributed", "300 billion distribution", "dtc distribution", "token allocation", "how distributed", "supply breakdown", "dtc split", "distribution breakdown"],
     ans: `<p>The 300 billion total supply is divided into four parts:</p>
           <p>• <span class="key-term">Community Mining (60% / 180 billion)</span> — Distributed to users through daily mining.<br>
           • <span class="key-term">Ecological Construction Fund (20% / 60 billion)</span> — Rewards for developers and promo activity.<br>
@@ -1152,68 +1600,67 @@ const faqs = [
     follow: ["What is the total supply of DTC?", "What is Delta?"]
   },
   {
-    q: "Does Delta have a TGE?", cat: "Tokenomics",
-    keys: ["tge", "token generation event", "launch event", "listing", "does delta have tge", "when tge", "when is tge", "tge date", "when launch"],
-    ans: `<p>Delta does not have a <span class="key-term">Token Generation Event (TGE)</span>. The coins you are mining are already real Delta coins — not points that will be converted later. There is no separate event where tokens are created or distributed.</p>`,
+    q: "Does Delta have a TGE?",
+    cat: "Tokenomics",
+    keys: ["does delta have a tge", "tge", "token generation event", "delta launch event", "listing event", "is there a tge"],
+    ans: `<p>No, Delta does not have a <span class="key-term">Token Generation Event (TGE)</span>. The coins you are mining are already real Delta coins, not points that will be converted later. There is no separate event where tokens are created or distributed.</p>`,
     follow: ["What is DTCT?", "What is DTC?"]
   },
   {
-    q: "What is KYC and why is it important?", cat: "Mining & KYC",
-    keys: ["kyc", "know your customer", "identity verification", "why kyc", "what is kyc", "verification"],
+    q: "What is KYC and why is it important?",
+    cat: "Mining & KYC",
+    keys: ["what is kyc", "why is kyc important", "know your customer", "identity verification kyc", "why kyc", "kyc verification", "what does kyc mean"],
     ans: `<p><span class="key-term">KYC (Know Your Customer)</span> is a process used to confirm that users are real people. It helps prevent fake accounts and ensures fair distribution of Delta coins across the community.</p>`,
     follow: ["Can I use Delta without completing KYC?", "How is DTCT converted to DTC?", "What is a Security Circle?"]
   },
   {
-    q: "What is the Flea Market in Delta?", cat: "Flea Market",
-    keys: ["flea market", "buy and sell", "marketplace", "what is flea market", "market"],
+    q: "What is the Flea Market in Delta?",
+    cat: "Flea Market",
+    keys: ["what is the flea market", "flea market", "flea market in delta", "delta marketplace", "peer to peer market", "p2p market delta"],
     ans: `<p>The <span class="key-term">Flea Market</span> is a peer-to-peer marketplace within the Delta ecosystem where users can buy and sell items using Delta coins. It is a core part of the ecosystem designed to drive real economic activity.</p>`,
     follow: ["Why is the Flea Market important?", "What is the Release Mechanism?"]
   },
   {
-    q: "What is dApp Square?", cat: "Technology",
-    keys: ["dapp square", "app marketplace", "decentralized apps", "dapp", "apps on delta"],
+    q: "Why is the Flea Market important?",
+    cat: "Flea Market",
+    // This FAQ must NOT be matched by "flea market" alone (that goes to the
+    // "What is the Flea Market?" FAQ). We anchor on "why" + "important".
+    keys: ["why is the flea market important", "why flea market important", "importance of flea market", "why does the flea market matter", "flea market importance", "why is flea market needed"],
+    ans: `<p>The Flea Market is the engine of the Delta economy. It is important for three main reasons:</p>
+          <p>• <span class="key-term">It drives real use of DTC</span>: Every transaction uses Delta coins, giving the currency genuine economic purpose beyond just speculation.<br>
+          • <span class="key-term">It unlocks your coins</span>: Each week, your DTCT only converts to DTC if you have made at least one Flea Market transaction. No activity, no release.<br>
+          • <span class="key-term">It keeps the ecosystem honest</span>: Because real buying and selling is required, inactive users cannot passively accumulate coins — participation is the price of access.</p>`,
+    follow: ["How does the Release Mechanism work?", "What is the Flea Market in Delta?"]
+  },
+  {
+    q: "What is dApp Square?",
+    cat: "Technology",
+    keys: ["what is dapp square", "dapp square", "app marketplace delta", "decentralized apps delta", "apps on delta", "delta dapp"],
     ans: `<p><span class="key-term">dApp Square</span> is Delta's app marketplace where users can discover and use decentralized applications. Developers can also build and launch their own apps on the platform — making it a hub for the Delta ecosystem's growth.</p>`,
     follow: ["What blockchain does Delta use?", "What is Delta?"]
   },
   {
-    q: "Who is an Ambassador?", cat: "Mining & KYC",
-    keys: ["ambassador", "recommending", "who is ambassador", "ambassador role", "what is ambassador"],
+    q: "Who is an Ambassador?",
+    cat: "Mining & KYC",
+    keys: ["who is an ambassador", "ambassador", "what is an ambassador", "ambassador role in delta", "delta ambassador", "referral ambassador"],
     ans: `<p>Any Delta miner can become an <span class="key-term">Ambassador</span> by recommending others to join the Delta network using their unique DID.</p>
           <p>Ambassadors play an important role in growing the Delta community. Their main responsibility is to guide new members on how to mine and help them understand the Delta system.</p>
           <p>Being an Ambassador also comes with a <span class="key-term">mining bonus</span>. Each time a directly referred person is actively mining, the Ambassador's daily mining rate increases — the more active referrals, the higher the earnings.</p>`,
     follow: ["How do referrals work in Delta?", "Will I lose my coins if I miss a day of mining?"]
   },
   {
-    q: "What is a Security Circle?", cat: "Mining & KYC",
-    keys: ["security circle", "trusted people", "security", "trusted contacts", "what is security circle"],
+    q: "What is a Security Circle?",
+    cat: "Mining & KYC",
+    keys: ["what is a security circle", "security circle", "trusted people delta", "trusted contacts delta", "security circle delta"],
     ans: `<p>A <span class="key-term">Security Circle</span> is a group of 1 to 5 trusted people you add to help verify your identity and protect your account if needed.</p>
           <p>It does <strong>not</strong> increase your mining rate — it is purely a security feature.</p>`,
     follow: ["What is KYC and why is it important?", "Who is a Validator?"]
-  },
-  {
-    q: "Who is a Validator?", cat: "Mining & KYC",
-    keys: ["validator", "who is validator", "what is validator", "validators", "validator role"],
-    ans: `<p>A <span class="key-term">Validator</span> is a trusted member of the Delta community who helps verify the identity of other users during the KYC process.</p>
-          <p>Validators review and confirm that the people in their network are real individuals, helping to maintain the integrity of the Delta ecosystem. Being a Validator is a responsibility that comes with the trust of your community.</p>`,
-    follow: ["What is KYC and why is it important?", "What is a Security Circle?", "Who is an Ambassador?"]
-  },
-  {
-    q: "Will I lose my coins if I miss a day of mining?", cat: "Mining & KYC",
-    keys: ["miss a day", "lose coins", "miss mining", "skip mining", "forget to mine", "miss day of mining", "will i lose", "lose my coins", "miss a day of mining"],
-    ans: `<p>No, you will <span class="key-term">not lose your existing DTCT</span> if you miss a day of mining. Your accumulated balance stays safe.</p>
-          <p>However, mining in Delta requires you to <span class="key-term">tap the mine button every 24 hours</span> to keep earning. If you miss a day, you simply don't earn new coins for that period — but everything you've already mined remains in your account.</p>`,
-    follow: ["What is DTCT?", "Who is an Ambassador?", "What is KYC and why is it important?"]
-  },
-  {
-    q: "How do referrals work in Delta?", cat: "Mining & KYC",
-    keys: ["referrals", "referral", "how referrals", "invite friends", "refer someone", "how do referrals work", "invitation", "invite"],
-    ans: `<p>In Delta, referrals work through your unique <span class="key-term">DID (Delta ID)</span>. When you share your DID with someone and they join using it, you become their <span class="key-term">Ambassador</span>.</p>
-          <p>Every time a person you directly referred is actively mining, your own daily mining rate increases. The more active referrals you have, the higher your earnings — making referrals one of the best ways to grow your mining income.</p>`,
-    follow: ["Who is an Ambassador?", "What is DTCT?", "Will I lose my coins if I miss a day of mining?"]
   }
 ];
 
-// ── BUILD PLAIN-TEXT KNOWLEDGE BASE FOR GEMINI ───────
+// ─────────────────────────────────────────────────────────────
+// BUILD PLAIN-TEXT KNOWLEDGE BASE FOR GEMINI
+// ─────────────────────────────────────────────────────────────
 function buildKnowledgeBase() {
   return faqs.map(f => {
     const plainAns = f.ans.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
@@ -1221,7 +1668,48 @@ function buildKnowledgeBase() {
   }).join('\n\n');
 }
 
-// ── API KEY MANAGEMENT ───────────────────────────────
+// ─────────────────────────────────────────────────────────────
+// IMPROVED FAQ MATCHER
+// Priority: exact title match → exact key match → key includes
+// query → query includes key. Short keys (≤3 chars) are never
+// used for the "query includes key" pass to avoid false grabs.
+// ─────────────────────────────────────────────────────────────
+function findFaqMatch(query) {
+  const q = query.toLowerCase().trim();
+
+  // Pass 1: exact title match
+  let m = faqs.find(f => f.q.toLowerCase() === q);
+  if (m) return m;
+
+  // Pass 2: exact key match
+  m = faqs.find(f => f.keys.some(k => k === q));
+  if (m) return m;
+
+  // Pass 3: key is contained within query (key must be ≥4 chars)
+  m = faqs.find(f => f.keys.some(k => k.length >= 4 && q.includes(k)));
+  if (m) return m;
+
+  // Pass 4: query is contained within a key (key must be ≥8 chars to avoid short key grabs)
+  m = faqs.find(f => f.keys.some(k => k.length >= 8 && k.includes(q)));
+  if (m) return m;
+
+  // Pass 5: word-overlap scoring
+  const qWords = q.split(/\s+/).filter(w => w.length > 3);
+  let best = null, bestScore = 0;
+  faqs.forEach(f => {
+    const allText = (f.keys.join(' ') + ' ' + f.q).toLowerCase();
+    // Only count words that are at least 4 chars to avoid common word noise
+    const score = qWords.filter(w => allText.includes(w)).length;
+    if (score > bestScore) { bestScore = score; best = f; }
+  });
+  if (bestScore >= 2) return best; // Require at least 2 matching words
+
+  return null;
+}
+
+// ─────────────────────────────────────────────────────────────
+// API KEY MANAGEMENT
+// ─────────────────────────────────────────────────────────────
 const STORAGE_KEY = 'delta_gemini_key';
 
 function getApiKey() {
@@ -1261,47 +1749,172 @@ function toggleKeyVisibility() {
   input.type = input.type === 'password' ? 'text' : 'password';
 }
 
-// ── INIT: show setup screen if no key ────────────────
-window.addEventListener('DOMContentLoaded', function() {
-  if (!getApiKey()) {
-    document.getElementById('setupScreen').style.display = 'flex';
-  }
+// ─────────────────────────────────────────────────────────────
+// ADMIN PIN LOGIC
+// Change ADMIN_PIN to whatever 4-digit code you want.
+// ─────────────────────────────────────────────────────────────
+const ADMIN_PIN = '1234'; // ← Change this to your preferred PIN
+let pinBuffer = '';
 
-  // Save on Enter key
-  document.getElementById('apiKeyInput').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') saveApiKey();
-  });
-});
-
-// ── MATCH (used to find follow-up chips) ─────────────
-function findFaqMatch(query) {
-  const q = query.toLowerCase().trim();
-  let match = faqs.find(f => f.keys.some(k => q === k));
-  if (match) return match;
-  match = faqs.find(f => f.keys.some(k => k.includes(q)));
-  if (match) return match;
-  match = faqs.find(f => f.keys.some(k => q.includes(k)));
-  if (match) return match;
-  match = faqs.find(f => f.q.toLowerCase() === q);
-  if (match) return match;
-  const qWords = q.split(/\s+/).filter(w => w.length > 2);
-  let best = null, bestScore = 0;
-  faqs.forEach(f => {
-    const all = (f.keys.join(' ') + ' ' + f.q).toLowerCase();
-    let score = qWords.filter(w => all.includes(w)).length;
-    if (all.includes(q.slice(0, 5))) score += 0.5;
-    if (score > bestScore) { bestScore = score; best = f; }
-  });
-  if (bestScore >= 1) return best;
-  return null;
+function openAdminPin() {
+  closeSidebar();
+  pinBuffer = '';
+  updatePinDots();
+  document.getElementById('adminPinScreen').classList.add('open');
 }
 
-// ── ASK GEMINI ────────────────────────────────────────
+function closeAdminPin() {
+  document.getElementById('adminPinScreen').classList.remove('open');
+  pinBuffer = '';
+  updatePinDots();
+}
+
+function pinPress(digit) {
+  if (pinBuffer.length >= 4) return;
+  pinBuffer += digit;
+  updatePinDots();
+  if (pinBuffer.length === 4) {
+    setTimeout(checkPin, 120);
+  }
+}
+
+function pinDelete() {
+  pinBuffer = pinBuffer.slice(0, -1);
+  updatePinDots();
+}
+
+function updatePinDots() {
+  for (let i = 0; i < 4; i++) {
+    const dot = document.getElementById('pd' + i);
+    dot.classList.remove('filled', 'error');
+    if (i < pinBuffer.length) dot.classList.add('filled');
+  }
+}
+
+function checkPin() {
+  if (pinBuffer === ADMIN_PIN) {
+    closeAdminPin();
+    openAdminPanel();
+  } else {
+    // Wrong PIN — flash red
+    for (let i = 0; i < 4; i++) {
+      const dot = document.getElementById('pd' + i);
+      dot.classList.remove('filled');
+      dot.classList.add('error');
+    }
+    setTimeout(() => {
+      pinBuffer = '';
+      updatePinDots();
+    }, 800);
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+// ADMIN PANEL
+// ─────────────────────────────────────────────────────────────
+function openAdminPanel() {
+  buildAdminPanel();
+  document.getElementById('adminPanel').classList.add('open');
+}
+
+function closeAdminPanel() {
+  document.getElementById('adminPanel').classList.remove('open');
+}
+
+function buildAdminPanel() {
+  // Stats bar
+  const cats = [...new Set(faqs.map(f => f.cat))];
+  const statsEl = document.getElementById('adminStats');
+  statsEl.innerHTML = `
+    <div class="admin-stat">
+      <div class="admin-stat-num">${faqs.length}</div>
+      <div class="admin-stat-label">Total FAQs</div>
+    </div>
+    ${cats.map(cat => `
+      <div class="admin-stat">
+        <div class="admin-stat-num">${faqs.filter(f => f.cat === cat).length}</div>
+        <div class="admin-stat-label">${cat}</div>
+      </div>
+    `).join('')}
+  `;
+
+  // FAQ list — all numbered 1 to N continuously, grouped by collapsible category
+  const bodyEl = document.getElementById('adminBody');
+  bodyEl.innerHTML = '';
+
+  let globalIndex = 0;
+  cats.forEach((cat, catIdx) => {
+    const catFaqs = faqs.filter(f => f.cat === cat);
+    const groupId = 'catGroup_' + catIdx;
+    const headerId = 'catHead_' + catIdx;
+
+    // Clickable category header
+    const catHeader = document.createElement('div');
+    catHeader.className = 'admin-cat-header';
+    catHeader.id = headerId;
+    catHeader.innerHTML = `
+      <span>${cat}</span>
+      <svg class="admin-cat-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+    `;
+    catHeader.onclick = () => {
+      const grp = document.getElementById(groupId);
+      const hdr = document.getElementById(headerId);
+      grp.classList.toggle('collapsed');
+      hdr.classList.toggle('collapsed');
+    };
+    bodyEl.appendChild(catHeader);
+
+    // Collapsible group wrapper
+    const group = document.createElement('div');
+    group.className = 'admin-cat-group';
+    group.id = groupId;
+
+    catFaqs.forEach(faq => {
+      globalIndex++;
+      const item = document.createElement('div');
+      item.className = 'admin-faq-item';
+
+      const plainAns = faq.ans.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+
+      item.innerHTML = `
+        <div class="admin-faq-q" onclick="toggleAdminFaq(this)">
+          <span class="admin-faq-num">${globalIndex}</span>
+          <span class="admin-faq-title">${faq.q}</span>
+          <svg class="admin-faq-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="admin-faq-answer">
+          <div class="admin-faq-answer-text">${plainAns}</div>
+          <div class="admin-faq-keys">
+            ${faq.keys.map(k => `<span class="admin-key-tag">${k}</span>`).join('')}
+          </div>
+          <button class="admin-test-btn" onclick="testFaq('${faq.q.replace(/'/g, "\\'")}')">▶ Test this question</button>
+        </div>
+      `;
+      group.appendChild(item);
+    });
+
+    bodyEl.appendChild(group);
+  });
+}
+
+function toggleAdminFaq(el) {
+  const item = el.parentElement;
+  item.classList.toggle('expanded');
+}
+
+function testFaq(question) {
+  closeAdminPanel();
+  showAnswer(question);
+}
+
+// ─────────────────────────────────────────────────────────────
+// ASK GEMINI
+// ─────────────────────────────────────────────────────────────
 async function askGemini(question) {
   const apiKey = getApiKey();
   const knowledgeBase = buildKnowledgeBase();
 
-  const prompt = `You are a helpful assistant for the Delta ecosystem — a mobile-first digital currency project. Answer the user's question using ONLY the knowledge base provided below. Do not use any outside knowledge.
+  const prompt = `You are a helpful assistant for the Delta ecosystem, a mobile-first digital currency project. Answer the user's question using ONLY the knowledge base provided below. Do not use any outside knowledge.
 
 Rules:
 - Answer naturally and conversationally, as if you know the Delta ecosystem well.
@@ -1328,7 +1941,6 @@ USER QUESTION: ${question}`;
 
   if (!response.ok) {
     const err = await response.json().catch(() => ({}));
-    // Invalid API key
     if (response.status === 400 || response.status === 401 || response.status === 403) {
       throw new Error('invalid_key');
     }
@@ -1340,19 +1952,21 @@ USER QUESTION: ${question}`;
   return text.trim();
 }
 
-// ── RENDER GEMINI TEXT → HTML ─────────────────────────
+// ─────────────────────────────────────────────────────────────
+// RENDER GEMINI TEXT → HTML
+// ─────────────────────────────────────────────────────────────
 function renderGeminiText(text) {
-  // Convert markdown-style **bold** to <strong>
   let html = text
     .replace(/\*\*(.*?)\*\*/g, '<strong style="color:var(--accent);font-weight:500;">$1</strong>')
     .replace(/\*(.*?)\*/g, '<em>$1</em>');
 
-  // Split into paragraphs on double newlines
   const paras = html.split(/\n\n+/).map(p => p.replace(/\n/g, '<br>').trim()).filter(Boolean);
   return paras.map(p => `<p>${p}</p>`).join('');
 }
 
-// ── SCROLL ARROW ─────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+// SCROLL ARROW
+// ─────────────────────────────────────────────────────────────
 const scrollBtn = document.getElementById('scrollDownBtn');
 
 function updateScrollArrow() {
@@ -1369,19 +1983,18 @@ function scrollToBottom() {
 
 window.addEventListener('scroll', updateScrollArrow, { passive: true });
 
-// ── SHOW ANSWER ───────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+// SHOW ANSWER
+// ─────────────────────────────────────────────────────────────
 async function showAnswer(questionText) {
-  // Switch to answer view
   document.getElementById('homeView').style.display = 'none';
   document.getElementById('answerView').style.display = 'block';
   document.getElementById('answerSearchBar').style.display = 'block';
   document.getElementById('answerSearchInput').value = '';
 
-  // Build chat block
   const block = document.createElement('div');
   block.className = 'chat-block';
 
-  // Question bubble
   const bubbleWrap = document.createElement('div');
   bubbleWrap.className = 'answer-q-bubble-wrap';
   const bubble = document.createElement('div');
@@ -1390,7 +2003,6 @@ async function showAnswer(questionText) {
   bubbleWrap.appendChild(bubble);
   block.appendChild(bubbleWrap);
 
-  // Loading dots
   const dots = document.createElement('div');
   dots.className = 'loading-dots';
   dots.innerHTML = '<span></span><span></span><span></span>';
@@ -1399,10 +2011,8 @@ async function showAnswer(questionText) {
   document.getElementById('chatThread').appendChild(block);
   setTimeout(updateScrollArrow, 50);
 
-  // Find matching FAQ for follow-up chips
   const faqMatch = findFaqMatch(questionText);
 
-  // Ask Gemini
   let geminiText = null;
   let geminiError = null;
 
@@ -1421,12 +2031,7 @@ async function showAnswer(questionText) {
   body.className = 'answer-body';
 
   if (geminiError === 'invalid_key') {
-    // Invalid key — fall back to FAQ, but also show key warning
-    if (faqMatch) {
-      body.innerHTML = faqMatch.ans;
-    } else {
-      body.innerHTML = `<p>Your Gemini API key doesn't seem to be working. Please update it via the menu.</p>`;
-    }
+    body.innerHTML = `<p>Your Gemini API key doesn't seem to be working. Please check it and try again.</p>`;
     content.appendChild(body);
 
     const resetBtn = document.createElement('button');
@@ -1437,32 +2042,10 @@ async function showAnswer(questionText) {
     content.appendChild(resetBtn);
 
   } else if (geminiError || !geminiText) {
-    // Any other error (network, local file, etc.) — silently fall back to FAQ
-    if (faqMatch) {
-      body.innerHTML = faqMatch.ans;
-      content.appendChild(body);
-      const followTopics = faqMatch.follow || [];
-      if (followTopics.length) {
-        const followDiv = document.createElement('div');
-        followDiv.className = 'answer-follow';
-        followDiv.innerHTML = followTopics.map(f =>
-          `<button class="follow-chip" onclick="showAnswer('${f.replace(/'/g, "\\'")}')">${f}</button>`
-        ).join('');
-        content.appendChild(followDiv);
-      }
-    } else {
-      body.innerHTML = `
-        <p>I don't have specific information on that topic yet. For the most accurate help, join the official Delta community.</p>
-        <p><a href="https://discord.gg/fw7mTD8Gha" target="_blank" style="color:var(--accent)">Join the Delta Discord →</a></p>
-      `;
-      content.appendChild(body);
-    }
-    block.appendChild(content);
-    setTimeout(updateScrollArrow, 50);
-    return;
+    body.innerHTML = `<p>Something went wrong while fetching your answer. Please check your connection and try again.</p>`;
+    content.appendChild(body);
 
   } else if (geminiText === 'UNKNOWN') {
-    // No match in knowledge base
     body.innerHTML = `
       <p>I don't have specific information on that topic yet. For the most accurate help, join the official Delta community.</p>
       <p><a href="https://discord.gg/fw7mTD8Gha" target="_blank" style="color:var(--accent)">Join the Delta Discord →</a></p>
@@ -1470,11 +2053,9 @@ async function showAnswer(questionText) {
     content.appendChild(body);
 
   } else {
-    // Good answer
     body.innerHTML = renderGeminiText(geminiText);
     content.appendChild(body);
 
-    // Follow-up chips from FAQ match
     const followTopics = faqMatch?.follow || [];
     if (followTopics.length) {
       const followDiv = document.createElement('div');
@@ -1490,7 +2071,9 @@ async function showAnswer(questionText) {
   setTimeout(updateScrollArrow, 50);
 }
 
-// ── HOME ──────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+// HOME / SEARCH
+// ─────────────────────────────────────────────────────────────
 function goHome() {
   document.getElementById('homeView').style.display = 'flex';
   document.getElementById('answerView').style.display = 'none';
@@ -1501,7 +2084,6 @@ function goHome() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ── SEARCH ────────────────────────────────────────────
 function handleSearch() {
   const val = document.getElementById('searchInput').value.trim();
   if (!val) return;
@@ -1522,7 +2104,9 @@ function handleAnswerSearchKey(e) {
   if (e.key === 'Enter') { e.preventDefault(); handleAnswerSearch(); }
 }
 
-// ── SIDEBAR ───────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+// SIDEBAR
+// ─────────────────────────────────────────────────────────────
 function openSidebar() {
   document.getElementById('sidebar').classList.add('open');
   document.getElementById('sidebarOverlay').classList.add('open');
@@ -1532,6 +2116,19 @@ function closeSidebar() {
   document.getElementById('sidebar').classList.remove('open');
   document.getElementById('sidebarOverlay').classList.remove('open');
 }
+
+// ─────────────────────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', function() {
+  if (!getApiKey()) {
+    document.getElementById('setupScreen').style.display = 'flex';
+  }
+
+  document.getElementById('apiKeyInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') saveApiKey();
+  });
+});
 </script>
 </body>
 </html>
