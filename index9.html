@@ -1,0 +1,2379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AskHub – Delta Ecosystem</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #000000;
+    --bg-nav:    #000000;
+    --bg-card:   #1a1a1a;
+    --bg-hover:  #222222;
+    --bg-input:  #1a1a1a;
+    --border:    rgba(255,255,255,0.08);
+    --border-md: rgba(255,255,255,0.12);
+    --text:      #ffffff;
+    --text-sub:  #888888;
+    --text-mute: #555555;
+    --accent:      #e8850f;
+    --accent-soft: rgba(232,133,15,0.12);
+    --r-sm: 8px;
+    --r-md: 14px;
+    --r-lg: 50px;
+  }
+
+  body.cream-mode {
+    --bg:        #f2ede4;
+    --bg-nav:    #ece7dd;
+    --bg-card:   #e8e2d8;
+    --bg-hover:  #ddd8cd;
+    --bg-input:  #e8e2d8;
+    --border:    rgba(0,0,0,0.08);
+    --border-md: rgba(0,0,0,0.12);
+    --text:      #1a1a1a;
+    --text-sub:  #666666;
+    --text-mute: #999999;
+    --accent-soft: rgba(232,133,15,0.15);
+  }
+  body.cream-mode .sidebar { background: #e8e2d8; }
+  body.cream-mode .answer-q { background: #ddd8cd; color: #1a1a1a; }
+  body.cream-mode #adminPanel { background: #f2ede4; }
+  body.cream-mode .admin-header { background: #e8e2d8; }
+  body.cream-mode .admin-faq-toggle { background: #ddd8cd; border-color: rgba(0,0,0,0.08); }
+  body.cream-mode .pin-card { background: #e8e2d8; border-color: rgba(232,133,15,0.3); }
+  body.cream-mode .pin-key { background: #ddd8cd; color: #1a1a1a; }
+  body.cream-mode .pin-key:hover { background: #ccc8be; }
+  body.cream-mode #adminPinScreen { background: rgba(242,237,228,0.97); }
+  body.cream-mode .search-wrap { background: #ddd8cd; }
+  body.cream-mode .answer-search-inner { background: #ddd8cd; }
+  body.cream-mode .answer-search-bar { background: linear-gradient(to top, #f2ede4 70%, transparent); }
+  body.cream-mode .question-chip { background: #e0dbd1; }
+  body.cream-mode .question-chip:hover { background: #d5d0c6; }
+  body.cream-mode .support-section { background: #e8e2d8; border-color: rgba(0,0,0,0.08); }
+  body.cream-mode .answer-body { color: #2a2a2a; }
+
+  /* ── TOAST: cream mode — white card matching screenshot ── */
+  body.cream-mode #feedbackToast {
+    background: #ffffff;
+    border-color: rgba(232,133,15,0.55);
+    color: #1a1a1a;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
+  body.cream-mode #feedbackToast .toast-dot { background: var(--accent); }
+
+  body.cream-mode .admin-faq-answer-text { color: #555; }
+  body.cream-mode .admin-key-tag { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.08); color: #888; }
+  body.cream-mode .action-btn { border-color: rgba(0,0,0,0.1); color: #666; }
+  body.cream-mode .action-btn:hover { background: rgba(0,0,0,0.06); border-color: rgba(0,0,0,0.18); color: #1a1a1a; }
+  body.cream-mode .action-btn.liked { background: rgba(232,133,15,0.12); border-color: rgba(232,133,15,0.4); color: var(--accent); }
+  body.cream-mode .action-btn.disliked { background: rgba(255,80,80,0.1); border-color: rgba(255,80,80,0.3); color: #ff6060; }
+  body.cream-mode .follow-chip { background: rgba(232,133,15,0.1); border-color: rgba(232,133,15,0.25); color: #555; }
+  body.cream-mode .follow-chip:hover { background: rgba(232,133,15,0.2); border-color: var(--accent); color: #1a1a1a; }
+  body.cream-mode .answer-follow { border-top-color: rgba(0,0,0,0.08); }
+  body.cream-mode .sidebar-link { color: #555; }
+  body.cream-mode .sidebar-link:hover { background: #ddd8cd; color: #1a1a1a; }
+  body.cream-mode .sidebar-close { color: #666; }
+  body.cream-mode .sidebar-close:hover { background: #ddd8cd; color: #1a1a1a; }
+  body.cream-mode .sidebar-admin-btn { color: var(--accent); }
+  body.cream-mode .admin-faq-item { border-bottom-color: rgba(0,0,0,0.07); }
+  body.cream-mode .admin-faq-title { color: #1a1a1a; }
+  body.cream-mode .admin-faq-chevron { stroke: #666; }
+  body.cream-mode .site-footer { color: #999; }
+  body.cream-mode .header-btn { color: #1a1a1a; }
+  body.cream-mode .header-btn:hover { background: #ddd8cd; }
+  body.cream-mode .header-name { color: #1a1a1a; }
+  body.cream-mode .home-title { color: #1a1a1a; }
+  body.cream-mode .ai-loader-dot { background: #bbb; }
+  body.cream-mode .ai-loader-star { color: #1a1a1a; }
+  body.cream-mode #searchInput { color: #1a1a1a; }
+  body.cream-mode #searchInput::placeholder { color: #999; }
+  body.cream-mode #answerSearchInput { color: #1a1a1a; }
+  body.cream-mode #answerSearchInput::placeholder { color: #999; }
+  body.cream-mode .answer-back { color: #666; }
+  body.cream-mode .answer-back:hover { color: #1a1a1a; }
+  body.cream-mode .sidebar-title { color: #1a1a1a; }
+  body.cream-mode .support-text { color: #666; }
+  body.cream-mode .support-label { color: var(--accent); }
+  body.cream-mode .chip-text { color: #1a1a1a; }
+  body.cream-mode .chip-icon svg { stroke: #1a1a1a; }
+  body.cream-mode .pin-title { color: #1a1a1a; }
+  body.cream-mode .pin-subtitle { color: #666; }
+  body.cream-mode .admin-badge { background: rgba(232,133,15,0.12); color: var(--accent); }
+  body.cream-mode .admin-title { color: #1a1a1a; }
+  body.cream-mode .admin-close { color: #666; }
+  body.cream-mode .admin-close:hover { background: #ddd8cd; color: #1a1a1a; }
+  body.cream-mode .admin-test-btn { background: rgba(232,133,15,0.1); border-color: rgba(232,133,15,0.2); color: var(--accent); }
+  body.cream-mode .toast-dot { background: var(--accent); }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100dvh;
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--bg-nav);
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .header-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+
+  .header-logo {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .header-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .header-name {
+    font-family: 'Sora', sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.2px;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .header-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    flex-shrink: 0;
+  }
+
+  .header-btn:hover { background: var(--bg-hover); }
+
+  .header-btn svg {
+    width: 22px;
+    height: 22px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 200;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+  }
+
+  .sidebar-overlay.open { opacity: 1; pointer-events: all; }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 280px;
+    height: 100%;
+    background: #111111;
+    z-index: 201;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
+    display: flex;
+    flex-direction: column;
+    padding: 24px 0;
+  }
+
+  .sidebar.open { transform: translateX(0); }
+
+  .sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidebar-title {
+    font-family: 'Sora', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .sidebar-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-sub);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .sidebar-close:hover { background: var(--bg-hover); color: var(--text); }
+
+  .sidebar-nav {
+    padding: 16px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 12px;
+    border-radius: var(--r-sm);
+    text-decoration: none;
+    color: var(--text-sub);
+    font-size: 14.5px;
+    font-weight: 400;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .sidebar-link:hover { background: var(--bg-hover); color: var(--text); }
+
+  .sidebar-link svg {
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+    opacity: 0.7;
+  }
+
+  /* ── MAIN ── */
+  .main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: calc(100dvh - 58px);
+    padding: 0 20px 40px;
+  }
+
+  /* ── HOME VIEW ── */
+  #homeView {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 520px;
+    padding-top: 80px;
+    animation: fadeUp 0.4s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .home-logo {
+    width: 72px;
+    height: 72px;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .home-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .home-title {
+    font-family: 'Sora', sans-serif;
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: -0.4px;
+    text-align: center;
+    margin-bottom: 36px;
+    line-height: 1.25;
+    color: var(--text);
+  }
+
+  /* ── SEARCH BOX ── */
+  .search-wrap {
+    width: 100%;
+    max-width: 420px;
+    background: #2a2a2a;
+    border-radius: var(--r-lg);
+    display: flex;
+    align-items: center;
+    padding: 10px 10px 10px 18px;
+    gap: 10px;
+    margin-bottom: 20px;
+    border: 2px solid transparent;
+    position: relative;
+  }
+
+  .search-wrap::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: var(--r-lg);
+    background: conic-gradient(from var(--glow-angle, 0deg), rgba(232,133,15,0.08) 0%, rgba(232,133,15,0.85) 40%, rgba(255,180,60,1) 50%, rgba(232,133,15,0.85) 60%, rgba(232,133,15,0.08) 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: glowSpin 4s linear infinite;
+    pointer-events: none;
+  }
+
+  @property --glow-angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+  }
+
+  @keyframes glowSpin {
+    to { --glow-angle: 360deg; }
+  }
+
+  #searchInput {
+    flex: 1;
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    line-height: 1.5;
+    resize: none;
+    min-height: 24px;
+    max-height: 120px;
+    overflow-y: auto;
+    padding: 0;
+  }
+
+  #searchInput::placeholder { color: #666; }
+
+  /* ── SEND BUTTON ── */
+  .search-send {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    background: var(--accent);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    transition: background 0.2s, transform 0.15s;
+  }
+
+  .search-send:hover { background: #d4760a; transform: scale(1.05); }
+
+  .search-send svg {
+    width: 16px;
+    height: 16px;
+    stroke: white;
+    fill: none;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* ── QUESTION CHIPS ── */
+  .question-list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 24px;
+  }
+
+  .question-chip {
+    width: 100%;
+    background: #1e1e1e;
+    border: none;
+    border-radius: var(--r-lg);
+    padding: 16px 22px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.2s;
+    opacity: 0;
+    animation: fadeUp 0.4s cubic-bezier(0.16,1,0.3,1) forwards;
+  }
+
+  .question-chip:nth-child(1) { animation-delay: 0.08s; }
+  .question-chip:nth-child(2) { animation-delay: 0.14s; }
+  .question-chip:nth-child(3) { animation-delay: 0.20s; }
+  .question-chip:nth-child(4) { animation-delay: 0.26s; }
+  .question-chip:hover { background: #2a2a2a; }
+
+  .chip-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    opacity: 0.55;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .chip-icon svg {
+    width: 20px;
+    height: 20px;
+    stroke: var(--text);
+    fill: none;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .chip-text {
+    font-size: 14.5px;
+    color: var(--text);
+    font-weight: 400;
+    line-height: 1.4;
+  }
+
+  /* ── ANSWER VIEW ── */
+  #answerView {
+    display: none;
+    width: 100%;
+    max-width: 600px;
+    padding-top: 40px;
+    padding-bottom: 100px;
+    animation: fadeUp 0.35s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  .answer-back {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-sub);
+    font-size: 13.5px;
+    font-family: 'Inter', sans-serif;
+    padding: 0;
+    margin-bottom: 24px;
+    transition: color 0.2s;
+  }
+
+  .answer-back:hover { color: var(--text); }
+
+  .answer-back svg {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* ── CHAT THREAD ── */
+  #chatThread {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .chat-block {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    animation: fadeUp 0.35s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  /* ── QUESTION BUBBLE ── */
+  .answer-q-bubble-wrap {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 28px;
+  }
+
+  .answer-q {
+    display: inline-block;
+    background: #2e2e2e;
+    border-radius: 20px 20px 4px 20px;
+    padding: 16px 22px;
+    font-family: 'Inter', sans-serif;
+    font-size: 17px;
+    font-weight: 400;
+    color: var(--text);
+    line-height: 1.45;
+    max-width: 82%;
+    text-align: left;
+  }
+
+  /* ── AI LOADING INDICATOR ── */
+  .ai-loader {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 0 8px;
+  }
+
+  .ai-loader-star {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    color: #ffffff;
+    animation: starPulse 1.8s ease-in-out infinite;
+  }
+
+  @keyframes starPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 0.5; transform: scale(0.88); }
+  }
+
+  .ai-loader-dots {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+  }
+
+  .ai-loader-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #555;
+    animation: dotBounce 1.2s ease-in-out infinite;
+  }
+
+  .ai-loader-dot:nth-child(1) { animation-delay: 0s; }
+  .ai-loader-dot:nth-child(2) { animation-delay: 0.2s; }
+  .ai-loader-dot:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes dotBounce {
+    0%, 60%, 100% { background: #444; transform: translateY(0); }
+    30%            { background: #888; transform: translateY(-4px); }
+  }
+
+  /* ── ANSWER CONTENT ── */
+  .answer-body {
+    font-size: 15.5px;
+    line-height: 1.85;
+    color: #d0d0d0;
+    font-weight: 300;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+  }
+
+  .answer-body.visible { opacity: 1; }
+
+  .answer-body p { margin-bottom: 12px; }
+  .answer-body p:last-child { margin-bottom: 0; }
+
+  .answer-body .key-term {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .answer-follow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    opacity: 0;
+    transition: opacity 0.6s ease 0.4s;
+  }
+
+  .answer-follow.visible { opacity: 1; }
+
+  .follow-chip {
+    font-size: 13px;
+    padding: 7px 16px;
+    border-radius: 20px;
+    background: rgba(232,133,15,0.08);
+    border: 1px solid rgba(232,133,15,0.2);
+    color: #aaa;
+    cursor: pointer;
+    transition: all 0.18s;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .follow-chip:hover {
+    background: rgba(232,133,15,0.15);
+    border-color: var(--accent);
+    color: var(--text);
+  }
+
+  /* ── FEEDBACK ACTIONS BAR ── */
+  .answer-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 16px;
+    opacity: 0;
+    transition: opacity 0.5s ease 0.6s;
+  }
+
+  .answer-actions.visible { opacity: 1; }
+
+  .action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: none;
+    border: 1px solid rgba(255,255,255,0.08);
+    cursor: pointer;
+    color: var(--text-sub);
+    transition: background 0.18s, border-color 0.18s, color 0.18s, transform 0.15s;
+    flex-shrink: 0;
+  }
+
+  .action-btn:hover {
+    background: rgba(255,255,255,0.06);
+    border-color: rgba(255,255,255,0.15);
+    color: var(--text);
+  }
+
+  .action-btn:active { transform: scale(0.92); }
+
+  .action-btn svg {
+    width: 15px;
+    height: 15px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    pointer-events: none;
+  }
+
+  /* Active states for like/dislike */
+  .action-btn.liked {
+    background: rgba(232,133,15,0.12);
+    border-color: rgba(232,133,15,0.4);
+    color: var(--accent);
+  }
+
+  .action-btn.disliked {
+    background: rgba(255,80,80,0.1);
+    border-color: rgba(255,80,80,0.3);
+    color: #ff6060;
+  }
+
+  /* Copy button success state */
+  .action-btn.copied {
+    background: rgba(40,180,100,0.1);
+    border-color: rgba(40,180,100,0.3);
+    color: #3ecf7e;
+  }
+
+  /* ── TOAST NOTIFICATION ── */
+  #feedbackToast {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%) translateY(12px);
+    background: #1c1c1c;
+    border: 1.5px solid rgba(232,133,15,0.55);
+    border-radius: 10px;
+    padding: 11px 18px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 13.5px;
+    font-family: 'Inter', sans-serif;
+    color: #ccc;
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s ease, transform 0.22s ease;
+    white-space: nowrap;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.5);
+  }
+
+  #feedbackToast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .toast-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  /* ── STICKY BOTTOM SEARCH ── */
+  .answer-search-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 12px 16px 20px;
+    background: linear-gradient(to top, #000 70%, transparent);
+    z-index: 50;
+  }
+
+  .answer-search-inner {
+    max-width: 600px;
+    margin: 0 auto;
+    background: #232323;
+    border-radius: var(--r-lg);
+    display: flex;
+    align-items: center;
+    padding: 12px 12px 12px 20px;
+    gap: 10px;
+    border: 2px solid transparent;
+    position: relative;
+  }
+
+  .answer-search-inner::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: var(--r-lg);
+    background: conic-gradient(from var(--glow-angle, 0deg), rgba(232,133,15,0.08) 0%, rgba(232,133,15,0.85) 40%, rgba(255,180,60,1) 50%, rgba(232,133,15,0.85) 60%, rgba(232,133,15,0.08) 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: glowSpin 4s linear infinite;
+    pointer-events: none;
+  }
+
+  #answerSearchInput {
+    flex: 1;
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+  }
+
+  #answerSearchInput::placeholder { color: #666; }
+
+  /* ── SUPPORT SECTION ── */
+  .support-section {
+    width: 100%;
+    max-width: 520px;
+    margin-top: 32px;
+    background: #141414;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 28px 24px;
+    text-align: center;
+  }
+
+  .support-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--accent);
+    margin-bottom: 12px;
+    font-family: 'Sora', sans-serif;
+  }
+
+  .support-text {
+    font-size: 14px;
+    color: var(--text-sub);
+    line-height: 1.65;
+    margin-bottom: 22px;
+    font-weight: 300;
+  }
+
+  .btn-discord {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    width: 100%;
+    padding: 14px 22px;
+    background: #5865F2;
+    color: white;
+    border-radius: var(--r-sm);
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .btn-discord:hover { background: #6875f5; transform: translateY(-1px); }
+
+  /* ── FOOTER ── */
+  .site-footer {
+    width: 100%;
+    max-width: 520px;
+    text-align: center;
+    margin-top: 28px;
+    padding-bottom: 8px;
+    font-size: 12.5px;
+    color: var(--text-mute);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  /* ── SCROLL DOWN ARROW ── */
+  #scrollDownBtn {
+    position: fixed;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 60;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: none;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(232,133,15,0.35);
+    transition: background 0.2s, transform 0.2s, opacity 0.25s;
+    opacity: 0;
+  }
+
+  #scrollDownBtn.visible { display: flex; opacity: 1; }
+  #scrollDownBtn:hover { background: #d4760a; transform: translateX(-50%) scale(1.08); }
+
+  #scrollDownBtn svg {
+    width: 18px;
+    height: 18px;
+    stroke: white;
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* ── ADMIN PIN SCREEN ── */
+  #adminPinScreen {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.95);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    z-index: 600;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  #adminPinScreen.open { display: flex; animation: fadeUp 0.3s cubic-bezier(0.16,1,0.3,1); }
+
+  .pin-card {
+    background: #111;
+    border: 1px solid rgba(255,165,0,0.2);
+    border-radius: 20px;
+    padding: 36px 28px;
+    width: 100%;
+    max-width: 360px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .pin-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: var(--accent-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .pin-icon svg {
+    width: 26px;
+    height: 26px;
+    stroke: var(--accent);
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .pin-title {
+    font-family: 'Sora', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .pin-subtitle {
+    font-size: 13px;
+    color: var(--text-sub);
+    margin-bottom: 28px;
+    line-height: 1.5;
+  }
+
+  .pin-dots {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  .pin-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid #333;
+    transition: all 0.15s;
+  }
+
+  .pin-dot.filled {
+    background: var(--accent);
+    border-color: var(--accent);
+    transform: scale(1.1);
+  }
+
+  .pin-dot.error {
+    background: #e05050;
+    border-color: #e05050;
+    animation: shake 0.4s ease;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%       { transform: translateX(-4px); }
+    40%       { transform: translateX(4px); }
+    60%       { transform: translateX(-4px); }
+    80%       { transform: translateX(4px); }
+  }
+
+  .pin-keypad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    width: 100%;
+    max-width: 260px;
+    margin-bottom: 16px;
+  }
+
+  .pin-key {
+    aspect-ratio: 1;
+    background: #1e1e1e;
+    border: none;
+    border-radius: 12px;
+    font-size: 20px;
+    font-family: 'Sora', sans-serif;
+    font-weight: 500;
+    color: var(--text);
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .pin-key:hover { background: #2a2a2a; }
+  .pin-key:active { background: #333; transform: scale(0.94); }
+  .pin-key.empty { background: transparent; cursor: default; }
+  .pin-key.del { font-size: 16px; color: var(--text-sub); }
+
+  .pin-cancel {
+    background: none;
+    border: none;
+    font-size: 13px;
+    color: var(--text-mute);
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    padding: 8px 16px;
+    transition: color 0.2s;
+  }
+
+  .pin-cancel:hover { color: var(--text-sub); }
+
+  /* ── ADMIN PANEL ── */
+  #adminPanel {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 700;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  #adminPanel.open { display: flex; }
+
+  .admin-header {
+    height: 58px;
+    background: #0a0a0a;
+    border-bottom: 1px solid rgba(232,133,15,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    flex-shrink: 0;
+  }
+
+  .admin-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .admin-badge {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-family: 'Sora', sans-serif;
+  }
+
+  .admin-title {
+    font-family: 'Sora', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .admin-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-sub);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .admin-close:hover { background: var(--bg-hover); color: var(--text); }
+  .admin-close svg {
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .admin-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 20px 60px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .admin-faq-item {
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .admin-faq-item:last-child { border-bottom: none; }
+
+  .admin-faq-q {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px 0;
+    cursor: pointer;
+    gap: 16px;
+  }
+
+  .admin-faq-title {
+    flex: 1;
+    font-size: 17px;
+    color: var(--text);
+    font-weight: 400;
+    line-height: 1.4;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .admin-faq-toggle {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    background: #1e1e1e;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .admin-faq-chevron {
+    width: 18px;
+    height: 18px;
+    stroke: var(--text-sub);
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 0.2s;
+  }
+
+  .admin-faq-item.expanded .admin-faq-chevron { transform: rotate(180deg); }
+
+  .admin-faq-answer {
+    display: none;
+    padding: 0 0 24px 0;
+  }
+
+  .admin-faq-item.expanded .admin-faq-answer { display: block; }
+
+  .admin-faq-answer-text {
+    font-size: 14px;
+    color: #888;
+    line-height: 1.8;
+    font-weight: 300;
+  }
+
+  .admin-faq-answer-text p { margin-bottom: 8px; }
+  .admin-faq-answer-text p:last-child { margin-bottom: 0; }
+
+  .admin-faq-keys {
+    margin-top: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .admin-key-tag {
+    font-size: 11px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 4px;
+    padding: 3px 8px;
+    color: #555;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .admin-test-btn {
+    margin-top: 12px;
+    font-size: 12px;
+    padding: 7px 16px;
+    background: var(--accent-soft);
+    border: 1px solid rgba(232,133,15,0.2);
+    border-radius: 6px;
+    color: var(--accent);
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.18s;
+  }
+
+  .admin-test-btn:hover { background: rgba(232,133,15,0.2); }
+
+  /* ── SIDEBAR BUTTONS ── */
+  .sidebar-admin-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 12px;
+    border-radius: var(--r-sm);
+    color: var(--accent);
+    font-size: 14.5px;
+    font-weight: 400;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    transition: background 0.2s, color 0.2s;
+    text-align: left;
+    width: 100%;
+    opacity: 0.7;
+  }
+
+  .sidebar-admin-btn:hover { background: var(--accent-soft); opacity: 1; }
+
+  .sidebar-admin-btn svg {
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+    opacity: 0.6;
+  }
+
+  @media (max-width: 480px) {
+    #homeView { padding-top: 56px; }
+    .home-title { font-size: 22px; }
+    .pin-card { padding: 28px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── FEEDBACK TOAST ── -->
+<div id="feedbackToast">
+  <span class="toast-dot"></span>
+  <span id="toastMessage">Noted — we appreciate it!</span>
+</div>
+
+<!-- ── ADMIN PIN SCREEN ── -->
+<div id="adminPinScreen">
+  <div class="pin-card">
+    <div class="pin-icon">
+      <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    </div>
+    <div class="pin-title">Admin Access</div>
+    <div class="pin-subtitle">Enter your PIN to view the FAQ database</div>
+    <div class="pin-dots" id="pinDots">
+      <div class="pin-dot" id="pd0"></div>
+      <div class="pin-dot" id="pd1"></div>
+      <div class="pin-dot" id="pd2"></div>
+      <div class="pin-dot" id="pd3"></div>
+    </div>
+    <div class="pin-keypad">
+      <button class="pin-key" onclick="pinPress('1')">1</button>
+      <button class="pin-key" onclick="pinPress('2')">2</button>
+      <button class="pin-key" onclick="pinPress('3')">3</button>
+      <button class="pin-key" onclick="pinPress('4')">4</button>
+      <button class="pin-key" onclick="pinPress('5')">5</button>
+      <button class="pin-key" onclick="pinPress('6')">6</button>
+      <button class="pin-key" onclick="pinPress('7')">7</button>
+      <button class="pin-key" onclick="pinPress('8')">8</button>
+      <button class="pin-key" onclick="pinPress('9')">9</button>
+      <button class="pin-key empty"></button>
+      <button class="pin-key" onclick="pinPress('0')">0</button>
+      <button class="pin-key del" onclick="pinDelete()">⌫</button>
+    </div>
+    <button class="pin-cancel" onclick="closeAdminPin()">Cancel</button>
+  </div>
+</div>
+
+<!-- ── ADMIN PANEL ── -->
+<div id="adminPanel">
+  <div class="admin-header">
+    <div class="admin-header-left">
+      <span class="admin-badge">Admin</span>
+      <span class="admin-title">FAQ Database</span>
+    </div>
+    <button class="admin-close" onclick="closeAdminPanel()">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="admin-body" id="adminBody"></div>
+</div>
+
+<!-- Header -->
+<header>
+  <a class="header-brand" href="#" onclick="goHome(); return false;">
+    <div class="header-logo">
+      <img src="https://i.postimg.cc/9M4yJ03V/file-00000000fd3c71f4a3859ca481972d85.png" alt="AskHub">
+    </div>
+    <span class="header-name">AskHub</span>
+  </a>
+
+  <div class="header-actions">
+    <button class="header-btn" onclick="goHome()" title="Refresh">
+      <svg viewBox="0 0 24 24">
+        <polyline points="23 4 23 10 17 10"/>
+        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+      </svg>
+    </button>
+    <button class="header-btn" onclick="openSidebar()" title="Menu">
+      <svg viewBox="0 0 24 24">
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<!-- Sidebar Overlay -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <span class="sidebar-title">Menu</span>
+    <button class="sidebar-close" onclick="closeSidebar()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+  <nav class="sidebar-nav">
+    <a class="sidebar-link" href="https://delta.kim/en/whitepaper" target="_blank">
+      <svg viewBox="0 0 24 24">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+        <line x1="16" y1="13" x2="8" y2="13"/>
+        <line x1="16" y1="17" x2="8" y2="17"/>
+        <polyline points="10 9 9 9 8 9"/>
+      </svg>
+      Whitepaper
+    </a>
+    <button class="sidebar-admin-btn" onclick="openAdminPin()">
+      <svg viewBox="0 0 24 24">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+      </svg>
+      FAQ Admin Panel
+    </button>
+    <button class="sidebar-admin-btn" id="creamToggleBtn" onclick="toggleCreamMode()" style="color:var(--text-sub);">
+      <svg viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="5"/>
+        <line x1="12" y1="1" x2="12" y2="3"/>
+        <line x1="12" y1="21" x2="12" y2="23"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="1" y1="12" x2="3" y2="12"/>
+        <line x1="21" y1="12" x2="23" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+      <span id="creamToggleLabel">Cream Mode</span>
+    </button>
+  </nav>
+</div>
+
+<!-- Main -->
+<main class="main">
+
+  <!-- Home View -->
+  <div id="homeView">
+    <div class="home-logo">
+      <img src="https://i.postimg.cc/9M4yJ03V/file-00000000fd3c71f4a3859ca481972d85.png" alt="AskHub">
+    </div>
+
+    <h1 class="home-title">Ask a question about the<br>Delta ecosystem</h1>
+
+    <div class="search-wrap">
+      <textarea id="searchInput" placeholder="Ask anything about the Delta…" rows="1" onkeydown="handleSearchKey(event)" oninput="autoResizeTextarea(this)"></textarea>
+      <button class="search-send" onclick="handleSearch()">
+        <svg viewBox="0 0 24 24">
+          <line x1="5" y1="12" x2="19" y2="12"/>
+          <polyline points="13 6 19 12 13 18"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="question-list">
+      <button class="question-chip" onclick="showAnswer('What is Delta?')">
+        <span class="chip-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+        <span class="chip-text">What is Delta?</span>
+      </button>
+      <button class="question-chip" onclick="showAnswer('What is the difference between DTCT and DTC?')">
+        <span class="chip-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+        <span class="chip-text">What is the difference between DTCT and DTC?</span>
+      </button>
+      <button class="question-chip" onclick="showAnswer('How does the Release Mechanism work?')">
+        <span class="chip-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+        <span class="chip-text">How does the Release Mechanism work?</span>
+      </button>
+      <button class="question-chip" onclick="showAnswer('Is it really decentralized?')">
+        <span class="chip-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+        <span class="chip-text">Is it really decentralized?</span>
+      </button>
+    </div>
+
+    <div class="support-section">
+      <div class="support-label">Technical Support</div>
+      <div class="support-text">Can't find the answer you're looking for? Visit the official Delta Discord to open a support ticket for direct assistance.</div>
+      <a href="https://discord.gg/fw7mTD8Gha" target="_blank" class="btn-discord">
+        <svg width="18" height="18" viewBox="0 0 127.14 96.36" fill="white"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.71,32.65-1.82,56.6.48,80.05a105.73,105.73,0,0,0,32.44,16.31,75.7,75.7,0,0,0,7.19-11.73,69.05,69.05,0,0,1-11.37-5.43c.95-.7,1.89-1.44,2.78-2.2a73.27,73.27,0,0,0,64.06,0c.89.76,1.83,1.5,2.78,2.2a69.13,69.13,0,0,1-11.37,5.43,75.46,75.46,0,0,0,7.19,11.73,105.47,105.47,0,0,0,32.44-16.31C130.66,50.55,126.06,26.82,107.7,8.07ZM42.47,65.69c-6.35,0-11.6-5.83-11.6-13s5.11-13,11.6-13,11.6,5.83,11.6,13S48.82,65.69,42.47,65.69Zm42.2,0c-6.35,0-11.6-5.83-11.6-13s5.11-13,11.6-13,11.6,5.83,11.6,13S91,65.69,84.67,65.69Z"/></svg>
+        Join Delta Discord
+      </a>
+    </div>
+
+    <div class="site-footer">Built for the Delta ecosystem. Not an official Delta product.</div>
+  </div>
+
+  <!-- Answer View -->
+  <div id="answerView">
+    <button class="answer-back" onclick="goHome()">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
+    </button>
+    <div id="chatThread"></div>
+  </div>
+
+  <!-- Sticky bottom search bar -->
+  <div class="answer-search-bar" id="answerSearchBar" style="display:none;">
+    <div class="answer-search-inner">
+      <input type="text" id="answerSearchInput" placeholder="Ask anything about the Delta…" onkeydown="handleAnswerSearchKey(event)">
+      <button class="search-send" onclick="handleAnswerSearch()">
+        <svg viewBox="0 0 24 24">
+          <line x1="5" y1="12" x2="19" y2="12"/>
+          <polyline points="13 6 19 12 13 18"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+</main>
+
+<!-- Scroll Down Arrow -->
+<button id="scrollDownBtn" onclick="scrollToBottom()" title="Scroll to bottom" aria-label="Scroll to bottom">
+  <svg viewBox="0 0 24 24">
+    <polyline points="6 9 12 15 18 9"/>
+  </svg>
+</button>
+
+<script>
+// ─────────────────────────────────────────────────────────────
+// FAQ DATA
+// ─────────────────────────────────────────────────────────────
+const faqs = [
+  {
+    q: "What is Delta?",
+    cat: "Technology",
+    keys: ["what is delta", "tell me about delta", "explain delta", "what delta", "about delta"],
+    ans: `<p>Delta is a <span class="key-term">mobile-first digital currency system</span> designed to make cryptocurrency accessible and energy-efficient. Unlike traditional models like Bitcoin, Delta uses a <span class="key-term">Proof of People</span> concept, where real users earn tokens through a mobile app instead of using expensive, power-intensive hardware.</p>
+          <p>The system runs on the <span class="key-term">Internet Computer blockchain</span> and features a two-token system:</p>
+          <p>• <span class="key-term">DTCT (Delta Credits)</span>: Earned through mobile mining.<br>
+          • <span class="key-term">DTC (Delta Coins)</span>: Activated after identity verification (KYC) and participation.</p>
+          <p>The ecosystem is built around the <span class="key-term">Flea Market</span>, a peer-to-peer marketplace for everyday buying and selling, and a decentralized application (dApp) platform.</p>`,
+    follow: ["What blockchain does Delta use?", "What is DTCT?", "What is DTC?"]
+  },
+  {
+    q: "What blockchain does Delta use?",
+    cat: "Technology",
+    keys: ["what blockchain does delta use", "which blockchain does delta use", "internet computer", "dfinity", "ic blockchain", "motoko", "flutter blockchain"],
+    ans: `<p>The Delta system runs on the <span class="key-term">Internet Computer (IC) blockchain</span>, developed by the DFINITY Foundation. It is one of the most advanced smart contract platforms in the world, offering high speed, low costs, and unlimited scalability compared to traditional blockchains.</p>
+          <p>The Delta system is built using the <span class="key-term">Motoko programming language</span>, which is designed specifically for the Internet Computer. The Delta mobile app is developed using <span class="key-term">Flutter</span>.</p>`,
+    follow: ["What is Delta?", "What is dApp Square?"]
+  },
+  {
+    q: "What is the difference between DTCT and DTC?",
+    cat: "Tokenomics",
+    keys: ["difference between dtct and dtc", "dtct vs dtc", "dtct and dtc difference", "difference dtct dtc", "compare dtct dtc"],
+    ans: `<p><span class="key-term">DTCT (Delta Credit)</span> is the version of DTC that has not yet been activated or released. This is what Delta miners are currently earning. In its current state, DTCT cannot be withdrawn, transferred, or used in the Flea Market.</p>
+          <p><span class="key-term">DTC (Delta Coin)</span> is the main digital currency of the Delta ecosystem. To receive DTC, you must complete identity verification (KYC) and actively participate in the Flea Market. Once those conditions are met, DTCT converts to DTC at a <span class="key-term">1:1 ratio</span>.</p>`,
+    follow: ["What is DTCT?", "What is DTC?", "How is DTCT converted to DTC?"]
+  },
+  {
+    q: "What is DTCT?",
+    cat: "Tokenomics",
+    keys: ["what is dtct", "dtct", "delta credit", "what are credits", "mining coins dtct"],
+    ans: `<p><span class="key-term">DTCT (Delta Credit)</span> is the version of DTC that has not yet been activated or released. This is what <span class="key-term">Delta miners</span> are currently earning.</p>
+          <p>In its current state, DTCT is restricted:</p>
+          <p>• It cannot be withdrawn or transferred to other wallets.<br>
+          • It cannot be used in the <span class="key-term">Flea Market</span> or sold for USDT.</p>`,
+    follow: ["What is DTC?", "How is DTCT converted to DTC?", "What is the Release Mechanism?"]
+  },
+  {
+    q: "What is DTC?",
+    cat: "Tokenomics",
+    keys: ["what is dtc", "dtc", "delta coin", "main coin", "delta currency"],
+    ans: `<p><span class="key-term">DTC (Delta Coin)</span> is the main digital currency of the Delta ecosystem.</p>
+          <p>DTC is not available to users right away. To receive it, you must complete <span class="key-term">identity verification (KYC)</span> and actively participate in the <span class="key-term">Flea Market</span>, Delta's peer-to-peer marketplace. Once those conditions are met, DTC is unlocked as a reward.</p>`,
+    follow: ["How is DTCT converted to DTC?", "What is the total supply of DTC?", "What is the Release Mechanism?"]
+  },
+  {
+    q: "How is DTCT converted to DTC?",
+    cat: "Tokenomics",
+    keys: ["how is dtct converted to dtc", "dtct to dtc", "convert dtct", "conversion ratio", "dtct conversion", "1:1 ratio", "how convert dtct"],
+    ans: `<p>Once a user completes <span class="key-term">KYC verification</span>, their DTCT is converted to DTC at a <span class="key-term">1:1 ratio</span>, meaning 1 DTCT becomes 1 DTC. The "Credit" you mined officially becomes a "Coin."</p>`,
+    follow: ["What is the Release Mechanism?", "What is KYC and why is it important?"]
+  },
+  {
+    q: "How does the Release Mechanism work?",
+    cat: "Flea Market",
+    keys: ["how does the release mechanism work", "release mechanism", "behavioral cycle release", "behavioral cycle", "how release works", "unlock coins", "weekly release", "dtc release process"],
+    ans: `<p>The <span class="key-term">Behavioral Cycle Release</span> moves your funds from DTCT to DTC gradually, not all at once:</p>
+          <p>• <span class="key-term">First Release</span>: Immediately after you pass KYC, the first 1/100 (1%) of your total DTCT is released as DTC.<br>
+          • <span class="key-term">Weekly Cycles</span>: After the first release, a new portion is released every 7 days.<br>
+          • <span class="key-term">Activity Requirement</span>: To trigger each weekly release, you must have at least one valid transaction (buying or selling) in the <span class="key-term">Flea Market</span>.</p>`,
+    follow: ["What is the Flea Market in Delta?", "What is KYC and why is it important?"]
+  },
+  {
+    q: "Is it really decentralized?",
+    cat: "Technology",
+    keys: ["is it really decentralized", "is delta decentralized", "really decentralized", "truly decentralized", "centralized or decentralized", "is delta centralized"],
+    ans: `<p>Yes. Delta is built on the <span class="key-term">Internet Computer blockchain</span>, which is fully decentralized. This means no single company or server controls the network, it runs on a globally distributed set of independent nodes.</p>
+          <p>The use of <span class="key-term">smart contracts (canisters)</span> on the Internet Computer means the rules of Delta are enforced by code, not by a central authority. This also means the Flea Market, mining, and token distribution are all transparent and tamper-proof.</p>`,
+    follow: ["What blockchain does Delta use?", "What is Delta?", "What is dApp Square?"]
+  },
+  {
+    q: "What is the total supply of DTC?",
+    cat: "Tokenomics",
+    keys: ["total supply of dtc", "what is the total supply", "total supply dtc", "how many dtc exist", "max supply dtc", "300 billion dtc", "dtc supply", "max supply"],
+    ans: `<p>The total initial supply of DTC is set at <span class="key-term">300 billion</span>. This large supply is intentional, making it practical for everyday transactions, pricing items in whole numbers rather than tiny fractions.</p>`,
+    follow: ["How is the 300 billion DTC distributed?", "Does Delta have a TGE?"]
+  },
+  {
+    q: "How is the 300 billion DTC distributed?",
+    cat: "Tokenomics",
+    keys: ["how is the 300 billion distributed", "300 billion distribution", "dtc distribution", "token allocation", "how distributed", "supply breakdown", "dtc split", "distribution breakdown"],
+    ans: `<p>The 300 billion total supply is divided into four parts:</p>
+          <p>• <span class="key-term">Community Mining (60% / 180 billion)</span>: Distributed to users through daily mining.<br>
+          • <span class="key-term">Ecological Construction Fund (20% / 60 billion)</span>: Rewards for developers and promo activity.<br>
+          • <span class="key-term">Consensus Expansion Fund (10% / 30 billion)</span>: Referral and registration rewards.<br>
+          • <span class="key-term">ICP Fuel Crowdfunding (10% / 30 billion)</span>: Raises fuel for blockchain operations.</p>`,
+    follow: ["What is the total supply of DTC?", "What is Delta?"]
+  },
+  {
+    q: "Does Delta have a TGE?",
+    cat: "Tokenomics",
+    keys: [
+      "does delta have a tge", "tge", "token generation event", "delta launch event", "listing event", "is there a tge",
+      "when tge", "wen tge", "when is tge", "tge date", "tge when", "wen is tge",
+      "when does tge happen", "tge happening", "tge launch", "tge launch date",
+      "when will tge be", "will there be a tge", "is tge happening", "tge release",
+      "token generation", "token launch delta", "when token launch", "wen token launch",
+      "when launch", "wen launch", "delta listing", "when listing", "wen listing",
+      "tge news", "any tge", "delta tge", "tge delta", "tge update", "tge announcement"
+    ],
+    ans: `<p>Delta does not have a <span class="key-term">Token Generation Event (TGE)</span>. The coins you are mining are already real Delta coins, not points that will be converted later. There is no separate event where tokens are created or distributed.</p>`,
+    follow: ["What is DTCT?", "What is DTC?"]
+  },
+  {
+    q: "What is KYC and why is it important?",
+    cat: "Mining & KYC",
+    keys: ["what is kyc", "why is kyc important", "know your customer", "identity verification kyc", "why kyc", "kyc verification", "what does kyc mean"],
+    ans: `<p><span class="key-term">KYC (Know Your Customer)</span> is a process used to confirm that users are real people. It helps prevent fake accounts and ensures fair distribution of Delta coins across the community.</p>`,
+    follow: ["Can I use Delta without completing KYC?", "How is DTCT converted to DTC?", "What is a Security Circle?"]
+  },
+  {
+    q: "What is the Flea Market in Delta?",
+    cat: "Flea Market",
+    keys: ["what is the flea market", "flea market", "flea market in delta", "delta marketplace", "peer to peer market", "p2p market delta"],
+    ans: `<p>The <span class="key-term">Flea Market</span> is a peer-to-peer marketplace within the Delta ecosystem where users can buy and sell items using Delta coins. It is a core part of the ecosystem designed to drive real economic activity.</p>`,
+    follow: ["Why is the Flea Market important?", "What is the Release Mechanism?"]
+  },
+  {
+    q: "Why is the Flea Market important?",
+    cat: "Flea Market",
+    keys: ["why is the flea market important", "why flea market important", "importance of flea market", "why does the flea market matter", "flea market importance", "why is flea market needed"],
+    ans: `<p>The Flea Market is the engine of the Delta economy. It is important for three main reasons:</p>
+          <p>• <span class="key-term">It drives real use of DTC</span>: Every transaction uses Delta coins, giving the currency genuine economic purpose beyond just speculation.<br>
+          • <span class="key-term">It unlocks your coins</span>: Each week, your DTCT only converts to DTC if you have made at least one Flea Market transaction. No activity, no release.<br>
+          • <span class="key-term">It keeps the ecosystem honest</span>: Because real buying and selling is required, inactive users cannot passively accumulate coins, as participation is the price of access.</p>`,
+    follow: ["How does the Release Mechanism work?", "What is the Flea Market in Delta?"]
+  },
+  {
+    q: "What is dApp Square?",
+    cat: "Technology",
+    keys: ["what is dapp square", "dapp square", "app marketplace delta", "decentralized apps delta", "apps on delta", "delta dapp"],
+    ans: `<p><span class="key-term">dApp Square</span> is Delta's app marketplace where users can discover and use decentralized applications. Developers can also build and launch their own apps on the platform, making it a hub for the Delta ecosystem's growth.</p>`,
+    follow: ["What blockchain does Delta use?", "What is Delta?"]
+  },
+  {
+    q: "Who is an Ambassador?",
+    cat: "Mining & KYC",
+    keys: ["who is an ambassador", "ambassador", "what is an ambassador", "ambassador role in delta", "delta ambassador", "referral ambassador"],
+    ans: `<p>Any Delta miner can become an <span class="key-term">Ambassador</span> by recommending others to join the Delta network using their unique DID.</p>
+          <p>Ambassadors play an important role in growing the Delta community. Their main responsibility is to guide new members on how to mine and help them understand the Delta system.</p>
+          <p>Being an Ambassador also comes with a <span class="key-term">mining bonus</span>. Each time a directly referred person is actively mining, the Ambassador's daily mining rate increases, and the more active referrals, the higher the earnings.</p>`,
+    follow: ["What is a Security Circle?", "What is KYC and why is it important?"]
+  },
+  {
+    q: "What is a Security Circle?",
+    cat: "Mining & KYC",
+    keys: ["what is a security circle", "security circle", "trusted people delta", "trusted contacts delta", "security circle delta"],
+    ans: `<p>A <span class="key-term">Security Circle</span> is a group of 1 to 5 trusted people you add to help verify your identity and protect your account if needed.</p>
+          <p>It does <strong>not</strong> increase your mining rate, it is purely a security feature.</p>`,
+    follow: ["What is KYC and why is it important?", "Who is an Ambassador?"]
+  },
+  {
+    q: "Will I lose my coins if I miss a day of mining?",
+    cat: "Mining & KYC",
+    keys: ["will i lose my coins if i miss a day", "lose coins miss day", "miss a day mining", "lose coins mining", "what happens if i miss a day", "miss day", "lose my coins", "coins lost", "missing a day", "forget to mine", "forgot to mine", "skip a day", "skip mining", "miss mining", "lost coins", "coins disappear", "coins gone", "coins safe", "are my coins safe", "do i lose coins", "will coins be lost"],
+    ans: `<p>No, you will <span class="key-term">not lose any of your mined coins</span> if you miss a day. Your balance stays safe.</p>
+          <p>Mining simply <span class="key-term">pauses</span> until you check in again. Only your daily earning stops, and nothing you have already mined is removed.</p>`,
+    follow: ["Can I mine Delta automatically?", "How does mining work on Delta?", "What is DTCT?"]
+  },
+  {
+    q: "Can Delta be used in the future for real payments?",
+    cat: "Technology",
+    keys: ["can delta be used for real payments", "future payments delta", "real payments delta", "use delta for payments", "delta as currency", "delta real money", "spend delta", "delta spending", "delta payment", "everyday payments", "real world use", "use delta in real life", "can i spend delta", "delta usable", "delta currency future", "real world currency", "everyday transactions", "delta everyday", "delta usability", "will delta be usable", "future of delta", "delta future use"],
+    ans: `<p>Yes. Delta is specifically designed to become a <span class="key-term">usable digital currency for everyday transactions</span>.</p>
+          <p>The entire ecosystem, including the <span class="key-term">Flea Market</span> , is built to give DTC real economic value through actual buying and selling, not just speculation.</p>`,
+    follow: ["What is DTC?", "What is the Flea Market in Delta?", "What is Delta?"]
+  },
+  {
+    q: "What is a DID in Delta?",
+    cat: "Mining & KYC",
+    keys: ["what is a did", "did in delta", "digital identity", "did delta", "what is did", "13 digit id", "unique id delta", "invitation code", "referral code delta", "did number", "delta id", "did code", "what is my did", "did identifier", "digital id delta", "did invitation", "did refer", "did account", "account id delta", "delta did", "my did", "user id delta", "id number delta"],
+    ans: `<p>A <span class="key-term">DID (Digital Identity)</span> is your unique <span class="key-term">13-digit ID</span> in the Delta app.</p>
+          <p>It serves two purposes:</p>
+          <p>• It <span class="key-term">identifies your account</span> within the Delta network.<br>
+          • It acts as your personal <span class="key-term">invitation code</span> to refer others to the app and grow your Ambassador network.</p>`,
+    follow: ["Who is an Ambassador?", "How do referrals work in Delta?", "What is KYC and why is it important?"]
+  },
+  {
+    q: "Can I use Delta without completing KYC?",
+    cat: "Mining & KYC",
+    keys: ["can i use delta without kyc", "without kyc", "use delta no kyc", "skip kyc", "kyc required", "is kyc required", "do i need kyc", "kyc optional", "without verification", "no kyc", "without identity verification", "can i mine without kyc", "kyc necessary", "use app without kyc", "delta without verification", "is kyc mandatory", "must i do kyc", "kyc compulsory", "unverified user", "no verification delta"],
+    ans: `<p>Yes, you can use Delta without completing KYC, but <span class="key-term">some features will be limited</span>.</p>
+          <p>Specifically, only <span class="key-term">KYC-verified users</span> can release their mined coins, meaning your DTCT cannot convert to DTC until you complete identity verification.</p>`,
+    follow: ["What is KYC and why is it important?", "How is DTCT converted to DTC?", "What is the Release Mechanism?"]
+  },
+  {
+    q: "Is Delta mining free?",
+    cat: "Mining & KYC",
+    keys: ["is delta mining free", "mining free", "is it free to mine", "cost to mine", "mining cost", "free mining", "does it cost money", "is delta free", "pay to mine", "do i pay", "no cost mining", "free to use", "is the app free", "delta app free", "mining no cost", "free delta", "cost of mining", "how much does mining cost", "is mining paid", "free to start"],
+    ans: `<p>Yes, Delta mining is completely <span class="key-term">free</span>. You do not need to pay any money to start or continue mining.</p>`,
+    follow: ["Do I need special equipment to mine Delta?", "How does mining work on Delta?", "Can I mine Delta automatically?"]
+  },
+  {
+    q: "Do I need special equipment to mine Delta?",
+    cat: "Mining & KYC",
+    keys: ["do i need special equipment", "special equipment mining", "equipment to mine", "hardware mining delta", "need a computer", "mining hardware", "gpu mining delta", "cpu mining delta", "phone mining delta", "smartphone mining", "what do i need to mine", "need equipment", "mining requirements", "device to mine", "phone to mine", "just a phone", "only smartphone", "mining setup", "rig mining delta", "no hardware needed", "no equipment needed"],
+    ans: `<p>No special equipment is needed. All you need is a <span class="key-term">smartphone</span> and the <span class="key-term">Delta app</span> to start mining.</p>
+          <p>Delta does not require GPUs, mining rigs, or powerful computers, as it is designed to be accessible to everyone.</p>`,
+    follow: ["Is Delta mining free?", "How does mining work on Delta?", "Can I mine Delta automatically?"]
+  },
+  {
+    q: "Can I mine Delta automatically?",
+    cat: "Mining & KYC",
+    keys: ["can i mine delta automatically", "automatic mining", "auto mine", "mine automatically", "auto mining delta", "does it mine itself", "mining automatic", "passive mining", "mine without checking in", "automated mining", "does delta mine itself", "background mining", "mine in background", "daily check in", "check in mining", "24 hours mining", "every 24 hours", "need to check in", "must check in", "daily mining", "mining daily"],
+    ans: `<p>No, Delta mining is <span class="key-term">not automatic</span>. You need to <span class="key-term">check in daily</span> (every 24 hours) to continue earning.</p>
+          <p>If you do not check in, mining simply pauses, but you will not lose any coins you have already earned.</p>`,
+    follow: ["Will I lose my coins if I miss a day of mining?", "How does mining work on Delta?", "Is Delta mining free?"]
+  },
+  {
+    q: "How do referrals work in Delta?",
+    cat: "Mining & KYC",
+    keys: ["how do referrals work", "referrals delta", "referral system", "how referrals work", "invite friends", "invite others", "refer friends", "referral rewards", "referral bonus", "invite bonus", "how to refer", "did referral", "refer someone", "invite someone", "referral code", "referral program", "refer and earn", "how to invite", "invite with did", "referral mining bonus", "referral rate boost", "refer to delta"],
+    ans: `<p>You can invite others to Delta using your <span class="key-term">DID (Digital Identity)</span> as an invitation code.</p>
+          <p>When someone joins using your DID:</p>
+          <p>• Both you and the new member may receive <span class="key-term">rewards</span>.<br>
+          • Your <span class="key-term">daily mining rate increases</span> as long as your referred members are actively mining.</p>
+          <p>The more active referrals you have, the higher your mining earnings, as this is part of the <span class="key-term">Ambassador</span> system.</p>`,
+    follow: ["Who is an Ambassador?", "What is a DID in Delta?", "Is Delta mining free?"]
+  },
+  {
+    q: "How does mining work on Delta?",
+    cat: "Mining & KYC",
+    keys: ["how does mining work", "how mining works", "how to mine", "mining on delta", "how do i mine", "delta mining", "mine delta", "start mining", "what is mining delta", "how does delta mining work", "mining process", "mobile mining", "check in daily", "mining explained", "delta mine", "how to start mining", "mining how it works", "phone mining", "daily check in mining", "mining energy", "battery mining", "processing power mining", "energy efficient mining"],
+    ans: `<p>Mining on Delta is done entirely through the <span class="key-term">mobile app</span> by simply <span class="key-term">checking in once every 24 hours</span>.</p>
+          <p>Unlike traditional cryptocurrency mining:</p>
+          <p>• It does <span class="key-term">not use your phone's processing power</span>.<br>
+          • It consumes <span class="key-term">almost no energy or battery</span>.<br>
+          • No special hardware or technical knowledge is required.</p>
+          <p>Just open the app, tap to check in, and your daily mining session begins.</p>`,
+    follow: ["Can I mine Delta automatically?", "Is Delta mining free?", "Do I need special equipment to mine Delta?"]
+  },
+  {
+    q: "What is USCT mining?",
+    cat: "Mining & KYC",
+    keys: ["what is usct mining", "usct mining", "usct", "usdt mining", "earn usdt delta", "earn usdt mining", "incentive ads delta", "play button delta", "real income mining", "usct module", "what is usct", "how does usct work", "usct feature", "usct delta app", "advertisements delta", "rewarded ads delta", "earn real money delta", "delta usdt", "usct explained"],
+    ans: `<p><span class="key-term">USCT mining</span> is a feature within the Delta app that allows users to earn <span class="key-term">USDT</span> alongside their regular DTC mining.</p>
+          <p>It works by displaying <span class="key-term">incentive advertisements</span> to users through a play button in the USCT mining module.</p>
+          <p>The purpose is threefold:</p>
+          <p>• Provide miners with <span class="key-term">real income</span> during the early stages of the Delta ecosystem.<br>
+          • Provide <span class="key-term">financial support</span> to Delta's core developers.<br>
+          • Give advertisers a channel to reach the Delta community.</p>`,
+    follow: ["How does mining work on Delta?", "What is DTCT?", "What is DTC?"]
+  },
+  {
+    q: "What is a Validator and how do you become one?",
+    cat: "Technology",
+    keys: ["what is a validator", "validator delta", "how to become a validator", "become a validator", "validator role", "staking election", "validator election", "delta validator", "3-no verification validator", "validator staking", "validator rewards", "validator working period", "validator slashing", "validator offline", "validator 90 days", "validator campaign pool", "what does a validator do", "validator explained", "validator requirements"],
+    ans: `<p>A <span class="key-term">Validator</span> is a Delta user who provides account authentication services to other users on the network. They are essential to Delta's <span class="key-term">3-No Verification system</span>.</p>
+          <p>To become a Validator, a miner must go through a <span class="key-term">staking election</span> by investing a certain amount of DTC into a campaign pool. The system automatically selects winners each day, with a maximum of <span class="key-term">30 people selected per cycle</span>. Successful Validators serve a <span class="key-term">90-day working period</span> and earn rewards for each completed verification.</p>
+          <p>Validators must stay online at all times. Going offline for more than <span class="key-term">1 hour</span> will result in their staked funds being <span class="key-term">slashed</span> and returned to the community mining pool.</p>`,
+    follow: ["What is the 3-No Verification system?", "What is KYC and why is it important?", "What is DTC?"]
+  },
+  {
+    q: "What is the 3-No Verification system?",
+    cat: "Technology",
+    keys: ["what is the 3-no verification system", "3-no verification", "3 no verification", "no password no private key no mnemonic", "no password delta", "no private key delta", "no mnemonic phrase delta", "decentralized sms authentication", "msisdn delta", "delta authentication", "how does delta verify identity", "delta identity verification", "phone number verification delta", "3no system", "three no verification", "delta no password", "delta login system", "delta security system", "how delta verifies users"],
+    ans: `<p><span class="key-term">3-No Verification</span> is Delta's unique account authentication method that eliminates the need for a password, private key, or mnemonic phrase.</p>
+          <p>Instead, Delta uses a <span class="key-term">Decentralized SMS Authentication Protocol</span> that verifies users through their mobile phone number (MSISDN). When identity verification is needed, the Delta system sends a verification string to a randomly selected <span class="key-term">Validator's</span> phone, which forwards it back to confirm the user's identity.</p>
+          <p>This makes Delta far more accessible and secure than traditional crypto wallets, since losing a private key or mnemonic phrase in other systems means <span class="key-term">permanently losing access to your funds</span>, but Delta eliminates that risk entirely.</p>`,
+    follow: ["What is a Validator and how do you become one?", "How does privacy work in Delta?", "What is the Delta multi-chain wallet?"]
+  },
+  {
+    q: "What is Delta's currency symbol?",
+    cat: "Tokenomics",
+    keys: ["what is delta currency symbol", "delta symbol", "dtc symbol", "delta coin symbol", "delta sign", "delta currency sign", "what symbol does delta use", "delta greek symbol", "delta δ", "dtc sign", "how to write delta coins", "delta coin sign", "currency code dtc", "delta coin code", "dtc currency code", "what is dtc symbol", "delta coin currency", "delta money symbol"],
+    ans: `<p>Delta Coin uses the symbol <span class="key-term">δ (delta)</span>. For example, ten Delta Coins would be written as <span class="key-term">10δ</span>, one hundred as <span class="key-term">100δ</span>, and so on.</p>
+          <p>The currency code is <span class="key-term">DTC</span>, which stands for Delta Coin.</p>`,
+    follow: ["What is DTC?", "What are transaction fees in Delta?", "What is the total supply of DTC?"]
+  },
+  {
+    q: "What is Delta Day?",
+    cat: "Technology",
+    keys: ["what is delta day", "delta day", "march 3rd delta", "delta anniversary", "delta celebration", "delta fee free day", "delta day 2023", "free transactions delta day", "delta day march", "delta holiday", "annual delta day", "delta day meaning", "delta day explained", "when is delta day", "delta no fee day", "delta special day"],
+    ans: `<p><span class="key-term">Delta Day</span> is an annual celebration defined as <span class="key-term">March 3rd</span> every year, starting from 2023.</p>
+          <p>On this day, all Delta transactions are completely <span class="key-term">free of handling fees</span>. This fee-free mechanism is built directly into the Delta program code, meaning it <span class="key-term">cannot be changed or cancelled</span> by anyone.</p>`,
+    follow: ["What are transaction fees in Delta?", "What is Delta?", "Does Delta plan to become open source?"]
+  },
+  {
+    q: "What are transaction fees in Delta?",
+    cat: "Tokenomics",
+    keys: ["what are transaction fees in delta", "transaction fees delta", "handling fee delta", "delta fees", "dtc fees", "how much are fees delta", "delta fee percentage", "1 per thousand delta", "fee burning delta", "delta burn fees", "minimum fee delta", "maximum fee delta", "delta transaction cost", "how much does it cost to send delta", "delta transfer fee", "fee structure delta", "delta handling fee", "fees explained delta", "delta fee amount", "deflationary delta"],
+    ans: `<p>Delta charges a <span class="key-term">handling fee of 1‰ (one per thousand)</span> on each transaction. The minimum fee is <span class="key-term">0.01δ</span> and the maximum is <span class="key-term">0.3δ</span>.</p>
+          <p>These fees are <span class="key-term">burned</span>, sent to an empty address and permanently removed from circulation. This creates a <span class="key-term">deflationary effect</span> on DTC over time.</p>
+          <p>Under the future <span class="key-term">DAO governance</span> model, the community may vote to issue additional coins to make up for the amount burned.</p>`,
+    follow: ["What is Delta Day?", "What is the DAO governance model?", "What is the total supply of DTC?"]
+  },
+  {
+    q: "Does Delta plan to become open source?",
+    cat: "Technology",
+    keys: ["does delta plan to become open source", "delta open source", "is delta open source", "will delta be open source", "delta open source plan", "delta transparency", "open source delta", "delta code release", "when will delta be open source", "delta open source milestone", "1/30 world population delta", "delta community currency", "delta shared currency", "delta fairness", "delta source code", "delta code public"],
+    ans: `<p>Yes. Delta plans to gradually <span class="key-term">open source its code</span> as the project develops.</p>
+          <p>The full open source release is expected to happen when the total number of Delta users reaches <span class="key-term">1/30 of the world's total population</span>. This is part of Delta's commitment to transparency, fairness, and becoming a <span class="key-term">shared currency system for all of humanity</span>.</p>`,
+    follow: ["What is the DAO governance model?", "Is it really decentralized?", "What is Delta?"]
+  },
+  {
+    q: "What is the DAO governance model?",
+    cat: "Technology",
+    keys: ["what is the dao governance model", "dao governance", "dao delta", "decentralized autonomous organization delta", "dao model delta", "delta governance", "how is delta governed", "delta dao", "governance committee delta", "developer committee delta", "sns delta", "service nervous system delta", "delta voting", "delta community governance", "dao explained delta", "delta decentralized governance", "who controls delta", "delta community control", "delta sns"],
+    ans: `<p><span class="key-term">DAO</span> stands for Decentralized Autonomous Organization. Once Delta is fully open sourced, it will transition from the current interim governance model to the <span class="key-term">DAO model</span>.</p>
+          <p>Under DAO governance, a <span class="key-term">Governance Committee</span> and a <span class="key-term">Developer Committee</span> will be elected by all Delta users. These committees will publish, vote on, and implement proposals through a <span class="key-term">Service Nervous System (SNS)</span>.</p>
+          <p>This ensures that no single person or team controls the direction of Delta, giving the <span class="key-term">entire community a voice</span> in how the system evolves.</p>`,
+    follow: ["Does Delta plan to become open source?", "Is it really decentralized?", "What blockchain does Delta use?"]
+  },
+  {
+    q: "What is the Delta multi-chain wallet?",
+    cat: "Technology",
+    keys: ["what is the delta multi-chain wallet", "multi-chain wallet delta", "multichain wallet delta", "delta wallet", "delta multi chain", "threshold ecdsa delta", "delta other blockchains", "delta send receive assets", "delta wallet features", "delta wallet security", "no private key wallet", "delta blockchain wallet", "delta crypto wallet", "delta wallet explained", "multi chain delta", "delta wallet other chains", "delta wallet transfers", "delta wallet how it works"],
+    ans: `<p>The <span class="key-term">Delta multi-chain wallet</span> is a built-in feature that allows users to send, receive, and manage assets from other blockchains, not just Delta.</p>
+          <p>It uses <span class="key-term">Threshold ECDSA signature technology</span> from the Internet Computer, which allows users to create addresses on other blockchains and make transfers <span class="key-term">without ever needing a private key</span>.</p>
+          <p>This makes the Delta wallet one of the most secure and convenient crypto wallets available, since there is <span class="key-term">no private key to lose or steal</span>.</p>`,
+    follow: ["What is the 3-No Verification system?", "How does privacy work in Delta?", "What blockchain does Delta use?"]
+  },
+  {
+    q: "How does privacy work in Delta?",
+    cat: "Technology",
+    keys: ["how does privacy work in delta", "privacy delta", "delta privacy", "delta anonymous", "delta identity privacy", "did accounting address delta", "delta transaction privacy", "delta public transactions", "delta multiple addresses", "delta default payment address", "is delta private", "delta privacy explained", "delta transaction visibility", "delta identity separation", "delta account privacy", "delta financial privacy", "delta address privacy"],
+    ans: `<p>Delta separates your <span class="key-term">DID (Digital Identity)</span> from your <span class="key-term">accounting address</span>. This means that while all transactions are publicly visible on the blockchain, no one can link your accounting address back to your personal identity.</p>
+          <p>You can also create <span class="key-term">multiple accounting addresses</span> under one DID for additional privacy, and set a <span class="key-term">default payment address</span> for convenience.</p>`,
+    follow: ["What is a DID in Delta?", "What is the Delta multi-chain wallet?", "What is the 3-No Verification system?"]
+  },
+  {
+    q: "What is the Ecological Construction Incentive Fund?",
+    cat: "Tokenomics",
+    keys: ["what is the ecological construction incentive fund", "ecological construction fund", "ecological fund delta", "ecological incentive fund", "20 percent dtc fund", "60 billion dtc fund", "dapp developer rewards delta", "delta developer fund", "delta promotion fund", "early transaction rewards delta", "ecological construction delta", "delta ecosystem fund", "delta developer incentive", "delta promotion rewards", "ecological fund explained", "delta builder rewards", "delta visibility fund"],
+    ans: `<p>The <span class="key-term">Ecological Construction Incentive Fund</span> represents <span class="key-term">20% (60 billion DTC)</span> of the total supply. It is used to support three main areas:</p>
+          <p>• <span class="key-term">dApp developer rewards</span>: Encouraging developers to build quality applications on the Delta ecosystem.<br>
+          • <span class="key-term">Image and visibility promotion</span>: Rewarding individuals or teams who help promote Delta to the wider world.<br>
+          • <span class="key-term">Early transaction rewards</span>: Rewarding users who participate in early transactions within the Delta app.</p>`,
+    follow: ["How is the 300 billion DTC distributed?", "What is dApp Square?", "What is Delta?"]
+  },
+  {
+    q: "What is the Consensus Expansion Fund?",
+    cat: "Tokenomics",
+    keys: ["what is the consensus expansion fund", "consensus expansion fund", "consensus fund delta", "10 percent dtc fund", "30 billion consensus fund", "referral reward fund", "registration reward fund", "validator reward fund", "consensus expansion delta", "delta consensus fund", "expansion fund delta", "what is consensus fund", "consensus fund explained", "delta referral fund", "delta registration fund"],
+    ans: `<p>The <span class="key-term">Consensus Expansion Fund</span> represents <span class="key-term">10% (30 billion DTC)</span> of the total supply. It is used to pay for three specific things:</p>
+          <p>• <span class="key-term">Fixed referral rewards</span>: Given to both you and the person you invite when they join Delta using your DID.<br>
+          • <span class="key-term">Registration rewards</span>: Given to new users when they join the network.<br>
+          • <span class="key-term">Validator rewards</span>: Paid to Validators during the early stages before this fund runs out.</p>`,
+    follow: ["How do referrals work in Delta?", "What is a Validator and how do you become one?", "How is the 300 billion DTC distributed?"]
+  },
+  {
+    q: "What is the ICP Fuel Crowdfunding?",
+    cat: "Tokenomics",
+    keys: ["what is the icp fuel crowdfunding", "icp fuel crowdfunding", "icp crowdfunding delta", "fuel crowdfunding delta", "10 percent icp fund", "30 billion icp fund", "delta cycles fuel", "icp tokens delta", "delta fuel mechanism", "how delta stays running", "delta operating costs", "icp fuel explained", "delta fuel fund", "icp fuel fund", "crowdfunding delta", "delta icp", "cycles fuel delta", "icp to cycles delta", "virtual account delta icp", "no access icp funds delta"],
+    ans: `<p>The <span class="key-term">ICP Fuel Crowdfunding</span> is the fourth part of Delta's total supply, representing <span class="key-term">10% (30 billion DTC)</span>.</p>
+          <p>Users can contribute <span class="key-term">ICP tokens</span> through a sub-program in dApp Square and receive <span class="key-term">Delta Credits</span> as a bonus in return.</p>
+          <p>The contributed ICP is stored in a <span class="key-term">virtual account not linked to any person</span>, meaning <span class="key-term">no one has access to those funds, not even the developers</span>. It is used automatically to keep Delta running on the Internet Computer by converting ICP into <span class="key-term">"cycles" fuel</span> whenever the balance runs low.</p>`,
+    follow: ["What blockchain does Delta use?", "How is the 300 billion DTC distributed?", "What is dApp Square?"]
+  },
+  {
+    q: "What is Proof of People (POP)?",
+    cat: "Technology",
+    keys: ["what is proof of people", "proof of people", "pop delta", "pop mining", "proof of people delta", "what is pop", "delta consensus mechanism", "how delta mining works differently", "delta not proof of work", "delta not proof of stake", "people based mining", "humanistic currency delta", "real person mining delta", "pop explained", "proof of people explained", "delta pop", "people first currency", "delta mining concept", "why delta is different from bitcoin"],
+    ans: `<p><span class="key-term">Proof of People (POP)</span> is Delta's way of confirming real participation in the network.</p>
+          <p>Unlike <span class="key-term">Proof of Work</span> which uses computing power, or <span class="key-term">Proof of Stake</span> which uses staked tokens, Proof of People confirms contribution through the <span class="key-term">authenticity of real individuals</span>.</p>
+          <p>When you mine on Delta, your phone is not doing any computing work. It simply acts as a tool to confirm that you are a real person, making Delta a <span class="key-term">people-first currency system</span>.</p>`,
+    follow: ["How does mining work on Delta?", "What is the 3-No Verification system?", "Is it really decentralized?"]
+  },
+  {
+    q: "What happens to non-KYC accounts in Delta?",
+    cat: "Mining & KYC",
+    keys: ["what happens to non kyc accounts", "non kyc accounts delta", "unverified accounts delta", "accounts without kyc delta", "non kyc delta", "what can unverified users do", "limits without kyc", "delta unverified account", "non kyc restrictions", "what are non kyc users allowed to do", "non verified delta account", "delta account without verification", "restrictions non kyc", "unverified delta user", "kyc account differences"],
+    ans: `<p>Non-KYC accounts are allowed to exist in the Delta system and can take part in transactions and interactions.</p>
+          <p>However, they have some limits:</p>
+          <p>• They <span class="key-term">cannot take part in the DTCT release process</span>.<br>
+          • They <span class="key-term">cannot become sellers</span> in the Flea Market.<br>
+          • They may be <span class="key-term">turned away by certain apps or other users</span> within the ecosystem since they are not marked as verified.</p>`,
+    follow: ["What is KYC and why is it important?", "Can I use Delta without completing KYC?", "What is the Flea Market in Delta?"]
+  },
+  {
+    q: "What is the referral reward for inviting someone to Delta?",
+    cat: "Mining & KYC",
+    keys: ["what is the referral reward", "referral reward delta", "reward for inviting someone", "invite reward delta", "how much do i get for referring", "referral bonus amount", "1 dtc referral reward", "fixed referral reward", "did referral reward", "how much is the referral reward", "reward for inviting friends delta", "referral reward amount", "delta invite reward", "how much do you get for inviting", "referral reward explained", "0.5 dtc reward", "referral reward after mining stops"],
+    ans: `<p>When someone registers using your <span class="key-term">DID</span>, both you and the new member each receive a fixed reward of <span class="key-term">1 DTC</span>.</p>
+          <p>If the referral happens after community mining has already stopped, the reward is cut in half to <span class="key-term">0.5 DTC each</span>.</p>
+          <p>These rewards come from the <span class="key-term">Consensus Expansion Fund</span>.</p>`,
+    follow: ["How do referrals work in Delta?", "Who is an Ambassador?", "What is the Consensus Expansion Fund?"]
+  },
+  {
+    q: "What is Delta's stablecoin plan?",
+    cat: "Technology",
+    keys: ["what is delta stablecoin plan", "delta stablecoin", "delta stable coin", "delta future stablecoin", "delta stablecoin plans", "will delta have a stablecoin", "delta sovereign currency bridge", "delta everyday payments future", "delta legal currency", "delta fiat bridge", "delta stablecoin community", "delta future plans stablecoin", "delta payment bridge", "delta stablecoin explained", "delta coin bridge"],
+    ans: `<p>Delta plans to build a <span class="key-term">stablecoin</span> that matches the price of regular government currencies, allowing every ordinary person to take part in its creation and use.</p>
+          <p>The goal is for this stablecoin to act as a <span class="key-term">bridge between Delta and everyday money</span>, making Delta usable in normal payment situations.</p>
+          <p>The details will be shaped through <span class="key-term">community discussions</span>.</p>`,
+    follow: ["What is DTC?", "Can Delta be used in the future for real payments?", "What is the DAO governance model?"]
+  },
+  {
+    q: "How does the mining rate change as more people join Delta?",
+    cat: "Mining & KYC",
+    keys: ["how does the mining rate change", "mining rate change", "mining rate more people", "halving delta", "delta halving", "mining rate delta", "how mining rate works", "base mining rate delta", "32 delta per day", "mining rate halving", "delta halving scheme", "mining participants rate", "rate change delta", "mining rate explained", "how rate decreases delta", "delta rate 32", "mining rate 2 delta", "delta stage 1 mining", "delta stage 2 mining", "30 million miners delta", "mining rate participants"],
+    ans: `<p>The base mining rate in Delta follows a <span class="key-term">two-stage halving scheme</span> that reduces over time as more people join.</p>
+          <p>In the <span class="key-term">first stage</span>, the starting rate is <span class="key-term">32δ per day</span>. Every time the total number of participants increases by 10 times, the rate is cut in half:</p>
+          <p>• 3,000 miners: <span class="key-term">32δ/day</span><br>
+          • 30,000 miners: <span class="key-term">16δ/day</span><br>
+          • 300,000 miners: <span class="key-term">8δ/day</span><br>
+          • ...continuing until it reaches <span class="key-term">2δ/day</span> at 30 million miners.</p>
+          <p>The <span class="key-term">second stage</span> then begins, where every time the participant count triples, the base rate halves again, continuing until community mining is fully completed and production stops.</p>`,
+    follow: ["How does mining work on Delta?", "How do direct and indirect referrals affect my mining rate?", "What is the total supply of DTC?"]
+  },
+  {
+    q: "How do direct and indirect referrals affect my mining rate?",
+    cat: "Mining & KYC",
+    keys: ["how do direct and indirect referrals affect my mining rate", "direct referral mining rate", "indirect referral mining rate", "referral mining bonus", "referral rate boost", "1/3 base rate referral", "1/10 base rate referral", "referral layers delta", "two layers referral delta", "referral mining bonus explained", "direct referral bonus", "indirect referral bonus", "how referrals boost mining", "mining rate referral", "ambassador mining rate", "referral daily earnings delta", "network mining bonus"],
+    ans: `<p>Referrals add to your daily earnings through <span class="key-term">two stacking layers</span> on top of your base mining rate.</p>
+          <p>• <span class="key-term">Direct referrals</span>: Every person you personally invited who is actively mining adds <span class="key-term">1/3 of the current base rate</span> to your daily earnings.<br>
+          • <span class="key-term">Indirect referrals</span>: Every person recommended by your direct referrals who is also actively mining adds an extra <span class="key-term">1/10 of the base rate</span> on top of that.</p>
+          <p>Both bonuses are calculated and added together each day, meaning the more active your network is, the significantly higher your daily mining income becomes.</p>`,
+    follow: ["Who is an Ambassador?", "How does the mining rate change as more people join Delta?", "How do referrals work in Delta?"]
+  },
+  {
+    q: "Are there limits on how I can buy and sell in the Flea Market to trigger releases?",
+    cat: "Flea Market",
+    keys: ["are there limits on flea market transactions", "flea market transaction limits", "one sided flea market", "flea market consecutive transactions", "3 consecutive transactions flea market", "flea market release rules", "flea market buying selling limit", "flea market balance rule", "flea market release trigger", "flea market 14 day period", "two release actions flea market", "flea market valid release", "can i only buy flea market", "can i only sell flea market", "flea market restrictions", "flea market rules release", "release mechanism flea market limit", "consecutive buying selling delta", "flea market one sided behavior"],
+    ans: `<p>Yes. The release mechanism includes a rule against <span class="key-term">one-sided behavior</span>. You cannot only buy or only sell for an extended period.</p>
+          <p>Specifically:</p>
+          <p>• A maximum of <span class="key-term">3 consecutive transactions</span> in the same direction (all buying or all selling) is allowed. If you exceed this, the release for that cycle will not trigger until you make a transaction in the <span class="key-term">opposite direction</span> to restore balance.<br>
+          • A maximum of <span class="key-term">two valid release actions</span> are counted within any <span class="key-term">14-day period</span>, giving you flexibility in how you schedule your Flea Market activity.</p>`,
+    follow: ["How does the Release Mechanism work?", "Why is the Flea Market important?", "What is the Flea Market in Delta?"]
+  },
+  {
+    q: "What happens to my Security Circle if I lose my phone?",
+    cat: "Mining & KYC",
+    keys: ["what happens to my security circle if i lose my phone", "lose phone security circle", "lost phone delta", "new device delta", "forced login delta", "security circle lost phone", "recover account delta", "lost device delta recovery", "security circle verification lost phone", "regain access delta", "security code lost phone delta", "security circle code", "account recovery delta", "delta new phone", "install delta new phone", "delta account recovery process"],
+    ans: `<p>If you lose your phone, install the Delta app on a new device and perform a <span class="key-term">forced login</span>. Because your original verification on the lost device becomes invalid, the system will require <span class="key-term">Security Circle verification</span> to confirm your identity.</p>
+          <p>You select one of your trusted circle members, who will be prompted to provide you with a <span class="key-term">security code</span>. Once you supply that code, your identity is confirmed and you regain access to your account.</p>
+          <p>This is precisely why it is important to add only people you <span class="key-term">genuinely trust</span> to your Security Circle.</p>`,
+    follow: ["What is a Security Circle?", "What is the 3-No Verification system?", "What is KYC and why is it important?"]
+  },
+  {
+    q: "What is the KYC market and how does it protect privacy?",
+    cat: "Mining & KYC",
+    keys: ["what is the kyc market", "kyc market delta", "community verification delta", "kyc market privacy", "selective disclosure delta", "fragmented storage delta", "kyc market explained", "how kyc market works", "kyc reward penalty delta", "kyc human verification", "kyc ai verification delta", "kyc market cross verify", "kyc privacy protection delta", "kyc market fragmented storage", "delta identity privacy kyc", "kyc market community based", "kyc market anti fraud", "mask detection kyc delta"],
+    ans: `<p>The <span class="key-term">KYC market</span> is a community-based verification system that works alongside AI identity recognition. Users publish their certification information, and other community members are incentivised through a <span class="key-term">reward and penalty mechanism</span> to cross-verify each submission.</p>
+          <p>To protect personal privacy during this process, Delta uses two methods:</p>
+          <p>• <span class="key-term">Selective disclosure</span>: Only the minimum information necessary for verification is shown to the verifier.<br>
+          • <span class="key-term">Fragmented distributed storage</span>: Personal data is split across multiple locations, meaning no single party ever holds a complete picture of a user's information.</p>
+          <p>The combination of AI screening and human verification is designed to catch fraud that AI alone might miss, such as masks or digital face-changing techniques.</p>`,
+    follow: ["What is KYC and why is it important?", "How does privacy work in Delta?", "What is a Validator and how do you become one?"]
+  },
+  {
+    q: "Is what I'm mining on the Delta app the real coin, or will it be converted later?",
+    cat: "Tokenomics",
+    keys: ["is what i mine the real coin", "is my mining real coin", "will my balance be reduced", "is dtct real coin", "mining real or fake delta", "will coins be converted later", "are mined coins real", "is delta mining real", "dtct real coin", "no reduction delta", "no conversion delta", "mining real delta coin", "dtct becomes dtc", "1:1 dtct dtc", "mined balance delta real", "is what i mine real", "mining real or points delta", "dtct not points"],
+    ans: `<p>Yes, what you are mining on the Delta app is the <span class="key-term">actual coin</span>. There is no reduction or special conversion that will cut your balance later.</p>
+          <p>Right now, your balance is shown as <span class="key-term">DTCT</span>, this is the pre-KYC version and cannot be used yet.</p>
+          <p>After you complete your <span class="key-term">KYC verification</span>, your DTCT converts to DTC at a <span class="key-term">1:1 ratio</span>. One DTCT becomes one DTC, with no loss.</p>
+          <p>Once it becomes DTC, it is fully usable, you can use it in the Flea Market, send it to other users, and withdraw it to supported wallets or exchanges when Delta gets listed.</p>`,
+    follow: ["What is DTCT?", "How is DTCT converted to DTC?", "What is KYC and why is it important?"]
+  }
+];
+
+// ─────────────────────────────────────────────────────────────
+// FAQ MATCHER
+// ─────────────────────────────────────────────────────────────
+function findFaqMatch(query) {
+  const q = query.toLowerCase().trim();
+  let m = faqs.find(f => f.q.toLowerCase() === q);
+  if (m) return m;
+  m = faqs.find(f => f.keys.some(k => k === q));
+  if (m) return m;
+  m = faqs.find(f => f.keys.some(k => k.length >= 4 && q.includes(k)));
+  if (m) return m;
+  m = faqs.find(f => f.keys.some(k => k.length >= 8 && k.includes(q)));
+  if (m) return m;
+  const qWords = q.split(/\s+/).filter(w => w.length > 3);
+  let best = null, bestScore = 0;
+  faqs.forEach(f => {
+    const allText = (f.keys.join(' ') + ' ' + f.q).toLowerCase();
+    const score = qWords.filter(w => allText.includes(w)).length;
+    if (score > bestScore) { bestScore = score; best = f; }
+  });
+  if (bestScore >= 2) return best;
+  return null;
+}
+
+// ─────────────────────────────────────────────────────────────
+// AUTO-RESIZE TEXTAREA
+// ─────────────────────────────────────────────────────────────
+function autoResizeTextarea(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+// ─────────────────────────────────────────────────────────────
+// TOAST NOTIFICATION
+// ─────────────────────────────────────────────────────────────
+let toastTimer = null;
+
+function showToast(message) {
+  const toast = document.getElementById('feedbackToast');
+  const msgEl = document.getElementById('toastMessage');
+  msgEl.textContent = message;
+
+  if (toastTimer) clearTimeout(toastTimer);
+
+  toast.classList.add('show');
+  toastTimer = setTimeout(() => {
+    toast.classList.remove('show');
+    toastTimer = null;
+  }, 2800);
+}
+
+// ─────────────────────────────────────────────────────────────
+// FEEDBACK ACTIONS (Like / Dislike / Copy)
+// ─────────────────────────────────────────────────────────────
+function handleLike(btn, blockEl) {
+  const dislikeBtn = blockEl.querySelector('.action-btn.dislike-btn');
+
+  if (btn.classList.contains('liked')) {
+    btn.classList.remove('liked');
+    return;
+  }
+
+  btn.classList.add('liked');
+  if (dislikeBtn) dislikeBtn.classList.remove('disliked');
+  showToast('Glad that helped!');
+}
+
+function handleDislike(btn, blockEl) {
+  const likeBtn = blockEl.querySelector('.action-btn.like-btn');
+
+  if (btn.classList.contains('disliked')) {
+    btn.classList.remove('disliked');
+    return;
+  }
+
+  btn.classList.add('disliked');
+  if (likeBtn) likeBtn.classList.remove('liked');
+  showToast('We\'ll work on improving this.');
+}
+
+function handleShare(btn, blockEl) {
+  const bodyEl = blockEl.querySelector('.answer-body');
+  if (!bodyEl) return;
+  const text = bodyEl.innerText || bodyEl.textContent || '';
+
+  if (navigator.share) {
+    navigator.share({ text: text.trim() }).catch(() => {});
+  } else {
+    showToast('Sharing is not supported on this browser.');
+  }
+}
+
+function shareIconSVG() {
+  return `<svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+  </svg>`;
+}
+
+function buildActionBar(blockEl) {
+  const bar = document.createElement('div');
+  bar.className = 'answer-actions';
+
+  const likeBtn = document.createElement('button');
+  likeBtn.className = 'action-btn like-btn';
+  likeBtn.title = 'Helpful';
+  likeBtn.innerHTML = `<svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>`;
+  likeBtn.addEventListener('click', () => handleLike(likeBtn, blockEl));
+
+  const dislikeBtn = document.createElement('button');
+  dislikeBtn.className = 'action-btn dislike-btn';
+  dislikeBtn.title = 'Not helpful';
+  dislikeBtn.innerHTML = `<svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/><path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg>`;
+  dislikeBtn.addEventListener('click', () => handleDislike(dislikeBtn, blockEl));
+
+  const shareBtn = document.createElement('button');
+  shareBtn.className = 'action-btn share-btn';
+  shareBtn.title = 'Share answer';
+  shareBtn.innerHTML = shareIconSVG();
+  shareBtn.addEventListener('click', () => handleShare(shareBtn, blockEl));
+
+  bar.appendChild(likeBtn);
+  bar.appendChild(dislikeBtn);
+  bar.appendChild(shareBtn);
+
+  return bar;
+}
+
+// ─────────────────────────────────────────────────────────────
+// ADMIN PIN LOGIC
+// ─────────────────────────────────────────────────────────────
+const ADMIN_PIN = '0963';
+let pinBuffer = '';
+
+function openAdminPin() {
+  closeSidebar();
+  pinBuffer = '';
+  updatePinDots();
+  document.getElementById('adminPinScreen').classList.add('open');
+}
+
+function closeAdminPin() {
+  document.getElementById('adminPinScreen').classList.remove('open');
+  pinBuffer = '';
+  updatePinDots();
+}
+
+function pinPress(digit) {
+  if (pinBuffer.length >= 4) return;
+  pinBuffer += digit;
+  updatePinDots();
+  if (pinBuffer.length === 4) setTimeout(checkPin, 120);
+}
+
+function pinDelete() {
+  pinBuffer = pinBuffer.slice(0, -1);
+  updatePinDots();
+}
+
+function updatePinDots() {
+  for (let i = 0; i < 4; i++) {
+    const dot = document.getElementById('pd' + i);
+    dot.classList.remove('filled', 'error');
+    if (i < pinBuffer.length) dot.classList.add('filled');
+  }
+}
+
+function checkPin() {
+  if (pinBuffer === ADMIN_PIN) {
+    closeAdminPin();
+    openAdminPanel();
+  } else {
+    for (let i = 0; i < 4; i++) {
+      const dot = document.getElementById('pd' + i);
+      dot.classList.remove('filled');
+      dot.classList.add('error');
+    }
+    setTimeout(() => { pinBuffer = ''; updatePinDots(); }, 800);
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+// ADMIN PANEL
+// ─────────────────────────────────────────────────────────────
+function openAdminPanel() {
+  buildAdminPanel();
+  document.getElementById('adminPanel').classList.add('open');
+}
+
+function closeAdminPanel() {
+  document.getElementById('adminPanel').classList.remove('open');
+}
+
+function buildAdminPanel() {
+  const bodyEl = document.getElementById('adminBody');
+  bodyEl.innerHTML = '';
+  faqs.forEach((faq, index) => {
+    const item = document.createElement('div');
+    item.className = 'admin-faq-item';
+    const plainAns = faq.ans.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+    item.innerHTML = `
+      <div class="admin-faq-q" onclick="toggleAdminFaq(this)">
+        <span class="admin-faq-title"><span style="color:var(--text);font-size:17px;margin-right:8px;">${index + 1}.</span>${faq.q}</span>
+        <div class="admin-faq-toggle">
+          <svg class="admin-faq-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </div>
+      <div class="admin-faq-answer">
+        <div class="admin-faq-answer-text">${plainAns}</div>
+        <div class="admin-faq-keys">
+          ${faq.keys.map(k => `<span class="admin-key-tag">${k}</span>`).join('')}
+        </div>
+        <button class="admin-test-btn" onclick="testFaq('${faq.q.replace(/'/g, "\\'")}')">▶ Test this question</button>
+      </div>
+    `;
+    bodyEl.appendChild(item);
+  });
+}
+
+function toggleAdminFaq(el) {
+  el.parentElement.classList.toggle('expanded');
+}
+
+function testFaq(question) {
+  closeAdminPanel();
+  showAnswer(question);
+}
+
+// ─────────────────────────────────────────────────────────────
+// SCROLL ARROW
+// ─────────────────────────────────────────────────────────────
+const scrollBtn = document.getElementById('scrollDownBtn');
+
+function updateScrollArrow() {
+  const answerView = document.getElementById('answerView');
+  const answerVisible = answerView.style.display === 'block';
+  if (!answerVisible) { scrollBtn.classList.remove('visible'); return; }
+  const distFromBottom = document.documentElement.scrollHeight - window.scrollY - window.innerHeight;
+  if (distFromBottom > 80) scrollBtn.classList.add('visible');
+  else scrollBtn.classList.remove('visible');
+}
+
+function scrollToBottom() {
+  window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
+}
+
+window.addEventListener('scroll', updateScrollArrow, { passive: true });
+window.addEventListener('load', updateScrollArrow);
+
+// ─────────────────────────────────────────────────────────────
+// SHOW ANSWER — with loader animation then fade-in
+// ─────────────────────────────────────────────────────────────
+function showAnswer(questionText) {
+  document.getElementById('homeView').style.display = 'none';
+  document.getElementById('answerView').style.display = 'block';
+  document.getElementById('answerSearchBar').style.display = 'block';
+  document.getElementById('answerSearchInput').value = '';
+
+  const block = document.createElement('div');
+  block.className = 'chat-block';
+
+  const bubbleWrap = document.createElement('div');
+  bubbleWrap.className = 'answer-q-bubble-wrap';
+  const bubble = document.createElement('div');
+  bubble.className = 'answer-q';
+  bubble.textContent = questionText;
+  bubbleWrap.appendChild(bubble);
+  block.appendChild(bubbleWrap);
+
+  const loader = document.createElement('div');
+  loader.className = 'ai-loader';
+  loader.innerHTML = `
+    <svg class="ai-loader-star" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/>
+    </svg>
+    <div class="ai-loader-dots">
+      <div class="ai-loader-dot"></div>
+      <div class="ai-loader-dot"></div>
+      <div class="ai-loader-dot"></div>
+    </div>
+  `;
+  block.appendChild(loader);
+
+  document.getElementById('chatThread').appendChild(block);
+
+  setTimeout(() => {
+    window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
+    updateScrollArrow();
+  }, 50);
+
+  setTimeout(() => {
+    loader.remove();
+
+    const faqMatch = findFaqMatch(questionText);
+    const content = document.createElement('div');
+
+    const body = document.createElement('div');
+    body.className = 'answer-body';
+
+    if (faqMatch) {
+      body.innerHTML = faqMatch.ans;
+      content.appendChild(body);
+
+      if (faqMatch.follow && faqMatch.follow.length) {
+        const followDiv = document.createElement('div');
+        followDiv.className = 'answer-follow';
+        followDiv.innerHTML = faqMatch.follow.map(f =>
+          `<button class="follow-chip" onclick="showAnswer('${f.replace(/'/g, "\\'")}')">${f}</button>`
+        ).join('');
+        content.appendChild(followDiv);
+
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => { followDiv.classList.add('visible'); });
+        });
+      }
+    } else {
+      body.innerHTML = `
+        <p>I don't have specific information on that topic yet. Try rephrasing your question, or browse the suggested questions below.</p>
+        <p>For direct support, join the official Delta community on Discord.</p>
+        <p><a href="https://discord.gg/fw7mTD8Gha" target="_blank" style="color:var(--accent)">Join the Delta Discord →</a></p>
+      `;
+      content.appendChild(body);
+
+      const suggestDiv = document.createElement('div');
+      suggestDiv.className = 'answer-follow';
+      const suggestions = ["What is Delta?", "What is the difference between DTCT and DTC?", "How does the Release Mechanism work?"];
+      suggestDiv.innerHTML = suggestions.map(f =>
+        `<button class="follow-chip" onclick="showAnswer('${f.replace(/'/g, "\\'")}')">${f}</button>`
+      ).join('');
+      content.appendChild(suggestDiv);
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => { suggestDiv.classList.add('visible'); });
+      });
+    }
+
+    block.appendChild(content);
+
+    const actionBar = buildActionBar(block);
+    content.appendChild(actionBar);
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        body.classList.add('visible');
+        actionBar.classList.add('visible');
+      });
+    });
+
+    setTimeout(() => {
+      window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
+      updateScrollArrow();
+    }, 100);
+
+  }, 5000);
+}
+
+// ─────────────────────────────────────────────────────────────
+// HOME / SEARCH / NAV
+// ─────────────────────────────────────────────────────────────
+function goHome() {
+  document.getElementById('homeView').style.display = 'flex';
+  document.getElementById('answerView').style.display = 'none';
+  document.getElementById('answerSearchBar').style.display = 'none';
+  document.getElementById('chatThread').innerHTML = '';
+  const si = document.getElementById('searchInput');
+  si.value = '';
+  si.style.height = 'auto';
+  scrollBtn.classList.remove('visible');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function handleSearch() {
+  const val = document.getElementById('searchInput').value.trim();
+  if (!val) return;
+  showAnswer(val);
+}
+
+function handleSearchKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSearch(); }
+}
+
+function handleAnswerSearch() {
+  const val = document.getElementById('answerSearchInput').value.trim();
+  if (!val) return;
+  showAnswer(val);
+}
+
+function handleAnswerSearchKey(e) {
+  if (e.key === 'Enter') { e.preventDefault(); handleAnswerSearch(); }
+}
+
+function openSidebar() {
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('sidebarOverlay').classList.add('open');
+}
+
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+}
+
+// ─────────────────────────────────────────────────────────────
+// DELTA MINI-APP SDK — Authentication
+// ─────────────────────────────────────────────────────────────
+async function initDeltaAuth() {
+  if (!window.delta) return;
+
+  try {
+    const confirmed = await window.delta.showConfirm("Authorize?", "AskHub");
+    if (!confirmed) return;
+
+    const res = await window.delta.authByIdentToken();
+    if (res == null) return;
+
+    localStorage.setItem("identToken", JSON.stringify(res));
+  } catch (e) {
+    // Fail silently
+  }
+}
+
+window.addEventListener("load", initDeltaAuth);
+
+// ─────────────────────────────────────────────────────────────
+// CREAM MODE TOGGLE
+// ─────────────────────────────────────────────────────────────
+function toggleCreamMode() {
+  const isCream = document.body.classList.toggle('cream-mode');
+  document.getElementById('creamToggleLabel').textContent = isCream ? 'Dark Mode' : 'Cream Mode';
+  try { localStorage.setItem('askhub-theme', isCream ? 'cream' : 'dark'); } catch(e) {}
+}
+
+(function() {
+  try {
+    if (localStorage.getItem('askhub-theme') === 'cream') {
+      document.body.classList.add('cream-mode');
+      const lbl = document.getElementById('creamToggleLabel');
+      if (lbl) lbl.textContent = 'Dark Mode';
+    }
+  } catch(e) {}
+})();
+</script>
+</body>
+</html>
